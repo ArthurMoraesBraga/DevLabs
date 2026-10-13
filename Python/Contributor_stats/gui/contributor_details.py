@@ -201,9 +201,7 @@ class ContributorDetails(tk.Toplevel):
                 f"PRs aprovados pelo colaborador: {d.prs_approved}\n"
                 f"Revisões realizadas: {d.reviews}\n"
                 f"Issues abertas pelo colaborador: {d.issues_opened}\n"
-                f"Issues dele que foram fechadas: {d.issues_closed}\n\n"
-                "Nota: fechamento de issue não comprova "
-                "quem a resolveu."
+                f"Issues do colaborador que foram fechadas: {d.issues_closed}\n\n"
             )
         )
 
@@ -221,7 +219,7 @@ class ContributorDetails(tk.Toplevel):
 
         self.files_text.configure(
             text=(
-                f"Arquivos distintos modificados (amostra): "
+                f"Arquivos  modificados: "
                 f"{d.files_changed}\n\n"
                 f"Pastas mais alteradas:\n"
                 f'{areas or "  Sem dados"}\n\n'

@@ -116,7 +116,7 @@ def analyze_contributor(owner, repo, username, token=None, client=None, max_page
                 continue
             paths.add(path)
             parts = PurePosixPath(path).parts
-            directories[parts[0] if len(parts)>1 else '(raiz)'] += 1
+            directories[parts[0] if len(parts)>1 else 'raiz'] += 1
             languages[EXTENSIONS.get(PurePosixPath(path).suffix.lower(),'Outros')] += 1
     result.files_changed = len(paths)
     result.directories = dict(directories.most_common())

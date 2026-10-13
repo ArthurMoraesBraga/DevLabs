@@ -477,7 +477,7 @@ class ContributorStatsApp(tk.Tk):
                 self._queue.put(("error", exc))
             except Exception as exc:  # erro inesperado: também vai para a GUI
                 self._queue.put(("error", exc))
-
+        
         self._worker = threading.Thread(target=worker, daemon=True)
         self._worker.start()
 
@@ -517,7 +517,10 @@ class ContributorStatsApp(tk.Tk):
             return
         result = self.result
         token = self.var_token.get().strip() or None
-        self.btn_pdf_general.configure(state="disabled")
+        self.btn_pdf_general.configure(
+            text="Gerando PDF...",
+            state="disabled"
+        )
         self.var_status.set("Coletando dados complementares para o PDF geral...")
 
 
@@ -574,7 +577,10 @@ class ContributorStatsApp(tk.Tk):
                 if kind == "pdf_progress":
                     self.var_status.set(payload)
                 elif kind == "pdf_done":
-                    self.btn_pdf_general.configure(state="normal")
+                    self.btn_pdf_general.configure(
+                        text="PDF geral",
+                        state="normal"
+                        )
                     self.var_status.set(f"PDF geral salvo: {payload}")
                     messagebox.showinfo("PDF geral", f"Relatório salvo em:\n{payload}", parent=self)
                 elif kind == "pdf_error":
