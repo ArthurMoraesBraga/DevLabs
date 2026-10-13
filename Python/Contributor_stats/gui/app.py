@@ -19,6 +19,7 @@ from datetime import datetime
 from tkinter import filedialog, messagebox, ttk
 from typing import Optional
 
+
 from core import (
     AnalysisResult,
     Contributor,
@@ -35,7 +36,9 @@ from core.config import DEFAULT_REPO_URL, get_configured_token
 
 from .theme import DARK, LIGHT, Fonts, Palette, apply_theme
 from .widgets import BarChart, Card, StatCard
-
+from gui.contributor_details import ContributorDetails
+from core.contributor_analysis import analyze_contributor
+from core.pdf_generator import gerar_pdf_geral
 
 def fmt_int(value: int, signed: bool = False) -> str:
     """Formata inteiros no padrão brasileiro (1.234)."""
@@ -52,7 +55,7 @@ COLUMNS = {
     "del": ("Deletadas", 90, "e", lambda c: c.deletions),
     "net": ("Impacto líquido", 125, "e", lambda c: c.net_impact),
     "last": ("Último commit", 115, "center",
-             lambda c: c.last_commit.toordinal() if c.last_commit else 0),
+            lambda c: c.last_commit.toordinal() if c.last_commit else 0),
 }
 
 CHART_METRICS = {
@@ -104,6 +107,77 @@ class ContributorStatsApp(tk.Tk):
         self._apply_widget_colors()
         self._bind_shortcuts()
         self.after(self.POLL_MS, self._process_queue)
+        
+        # NOVO METOODO
+    def abrir_detalhes(self):
+        contributor = self._selected_contributor()
+
+        if contributor is None:
+            messagebox.showwarning(
+            "Atenção",
+            "Selecione um colaborador na tabela."
+            )
+            return
+
+        if self.result is None:
+            return
+
+        ContributorDetails(
+            self,
+            contributor,
+            self.result.full_name,
+            token=self.var_token.get().strip() or None
+        )
+        
+    def mostrar_carregamento_pdf(self):
+        self.aviso_pdf = tk.Frame(
+            self,
+            bg="#1B2232",
+            highlightbackground="#678DFF",
+            highlightthickness=1
+        )
+
+        self.aviso_pdf.place(
+            relx=1.0,
+            rely=1.0,
+            anchor="se",
+            x=-20,
+            y=-20,
+            width=280,
+            height=90
+        )
+
+        tk.Label(
+            self.aviso_pdf,
+            text="Gerando PDF geral...",
+            bg="#1B2232",
+            fg="#FFFFFF",
+            font=("Segoe UI", 11, "bold")
+        ).pack(pady=(12, 5))
+
+        self.barra_pdf = ttk.Progressbar(
+            self.aviso_pdf,
+            mode="indeterminate"
+        )
+        self.barra_pdf.pack(fill="x", padx=18)
+        self.barra_pdf.start(12)
+
+    def finalizar_carregamento_pdf(self, caminho=None, erro=None):
+        self.barra_pdf.stop()
+        self.aviso_pdf.destroy()
+
+        self.botao_pdf_geral.configure(state="normal")
+
+        if erro:
+            messagebox.showerror(
+                "Erro ao gerar PDF",
+                erro
+            )
+        else:
+            messagebox.showinfo(
+                "PDF gerado",
+                f"Relatório salvo com sucesso!\n\n{caminho}"
+            )
 
     # ================================================================== #
     # Construção da interface
@@ -158,7 +232,7 @@ class ContributorStatsApp(tk.Tk):
         self.entry_token = ttk.Entry(token_row, textvariable=self.var_token, show="•")
         self.entry_token.grid(row=0, column=0, sticky="ew")
         self.btn_show = ttk.Button(token_row, text="Mostrar", width=8,
-                                   command=self._toggle_token_visibility)
+                                command=self._toggle_token_visibility)
         self.btn_show.grid(row=0, column=1, padx=(6, 0))
 
         # --- Ordenação
@@ -183,10 +257,10 @@ class ContributorStatsApp(tk.Tk):
             row=0, column=1, sticky="w")
 
         self.btn_cancel = ttk.Button(bottom, text="Cancelar", command=self.cancel_analysis,
-                                     state="disabled")
+                                    state="disabled")
         self.btn_cancel.grid(row=0, column=2, padx=(8, 0))
         self.btn_analyze = ttk.Button(bottom, text="Analisar repositório", style="Accent.TButton",
-                                      command=self.start_analysis)
+                                    command=self.start_analysis)
         self.btn_analyze.grid(row=0, column=3, padx=(8, 0))
         return card
 
@@ -228,7 +302,7 @@ class ContributorStatsApp(tk.Tk):
         title_box.grid(row=0, column=0, sticky="w")
         ttk.Label(title_box, text="Ranking de colaboradores", style="Section.TLabel").pack(anchor="w")
         self.lbl_repo = ttk.Label(title_box, text="Nenhum repositório analisado",
-                                  style="CardMuted.TLabel")
+                                style="CardMuted.TLabel")
         self.lbl_repo.pack(anchor="w")
 
         ttk.Label(head, text="Filtrar", style="CardMuted.TLabel").grid(row=0, column=1, padx=(0, 6))
@@ -236,28 +310,33 @@ class ContributorStatsApp(tk.Tk):
         self.entry_filter.grid(row=0, column=2)
         self.var_filter.trace_add("write", lambda *_: self._refresh_table())
         self.btn_export = ttk.Button(head, text="Exportar CSV", command=self.export_csv,
-                                     state="disabled")
+                                    state="disabled")
         self.btn_export.grid(row=0, column=3, padx=(8, 0))
+        self.btn_details = ttk.Button(head, text="Ver Detalhes", command=self.abrir_detalhes)
+        self.btn_details.grid(row=0, column=4, padx=(8,0))
+        self.btn_pdf_general = ttk.Button(head, text="PDF geral", command=self.export_pdf_general, state="disabled")
+        self.btn_pdf_general.grid(row=0, column=5, padx=(8,0))
+
 
         self.tree = ttk.Treeview(tb, columns=list(COLUMNS), show="headings", selectmode="browse")
         for col, (title, width, anchor, _) in COLUMNS.items():
             self.tree.heading(col, text=title, anchor=anchor,
-                              command=lambda c=col: self._sort_table_by(c))
+                            command=lambda c=col: self._sort_table_by(c))
             self.tree.column(col, width=width, minwidth=50, anchor=anchor,
-                             stretch=(col == "user"))
+                            stretch=(col == "user"))
         self.tree.grid(row=1, column=0, sticky="nsew")
         scroll = ttk.Scrollbar(tb, orient="vertical", command=self.tree.yview)
         scroll.grid(row=1, column=1, sticky="ns")
         self.tree.configure(yscrollcommand=scroll.set)
-        self.tree.bind("<Double-1>", lambda _e: self._open_selected_profile())
+        self.tree.bind("<Double-1>", lambda _e: self.abrir_detalhes())
         self.tree.bind("<Button-3>", self._show_context_menu)
         self.tree.bind("<Button-2>", self._show_context_menu)  # macOS
 
         ttk.Label(tb, text="Dica: clique no cabeçalho para ordenar · duplo clique abre o perfil no GitHub",
-                  style="CardMuted.TLabel").grid(row=2, column=0, columnspan=2, sticky="w", pady=(8, 0))
+                style="CardMuted.TLabel").grid(row=2, column=0, columnspan=2, sticky="w", pady=(8, 0))
 
         self.menu = tk.Menu(self, tearoff=0)
-        self.menu.add_command(label="Abrir perfil no GitHub", command=self._open_selected_profile)
+        self.menu.add_command(label="Abrir detalhes do usuário", command=self.abrir_detalhes)
         self.menu.add_command(label="Copiar nome de usuário", command=self._copy_selected_username)
 
         # Gráfico
@@ -273,7 +352,7 @@ class ContributorStatsApp(tk.Tk):
         ctitle.grid(row=0, column=0, sticky="w")
         ttk.Label(ctitle, text="Top 10", style="Section.TLabel").pack(anchor="w")
         ttk.Label(ctitle, text="Comparativo por métrica",
-                  style="CardMuted.TLabel").pack(anchor="w")
+                style="CardMuted.TLabel").pack(anchor="w")
         combo_metric = ttk.Combobox(chead, textvariable=self.var_chart_metric, state="readonly",
                                     values=list(CHART_METRICS), width=15)
         combo_metric.grid(row=0, column=1, sticky="e")
@@ -291,7 +370,7 @@ class ContributorStatsApp(tk.Tk):
         lb.columnconfigure(0, weight=1)
         lb.rowconfigure(0, weight=1)
         self.log = tk.Text(lb, wrap="word", bd=0, highlightthickness=0, padx=8, pady=6,
-                           font=self.fonts.mono, state="disabled", height=10)
+                        font=self.fonts.mono, state="disabled", height=10)
         self.log.grid(row=0, column=0, sticky="nsew")
         log_scroll = ttk.Scrollbar(lb, orient="vertical", command=self.log.yview)
         log_scroll.grid(row=0, column=1, sticky="ns")
@@ -427,6 +506,55 @@ class ContributorStatsApp(tk.Tk):
         self._log(ProgressEvent(f"Ranking exportado para {saved}", "success"))
         self.var_status.set(f"CSV salvo em {saved}")
 
+    def export_pdf_general(self):
+        if not self.result or not self.result.contributors:
+            return
+        path = filedialog.asksaveasfilename(
+            title="Salvar relatório geral", defaultextension=".pdf",
+            initialfile=f"{self.result.repo}_relatorio_geral.pdf",
+            filetypes=[("PDF", "*.pdf")])
+        if not path:
+            return
+        result = self.result
+        token = self.var_token.get().strip() or None
+        self.btn_pdf_general.configure(state="disabled")
+        self.var_status.set("Coletando dados complementares para o PDF geral...")
+
+
+        def worker():
+            try:
+                extra = {}
+                total = len(result.contributors)
+
+                for index, contributor in enumerate(result.contributors, 1):
+                    self._queue.put((
+                        "pdf_progress",
+                        f"Analisando {index}/{total}: {contributor.username}"
+                    ))
+
+                    extra[contributor.username] = analyze_contributor(
+                        result.owner,
+                        result.repo,
+                        contributor.username,
+                        token
+                    )
+
+                self._queue.put((
+                    "pdf_progress",
+                    "Montando relatório PDF..."
+                ))
+
+                gerar_pdf_geral(result, path, extra)
+
+                self._queue.put(("pdf_done", path))
+
+            except Exception as exc:
+                self._queue.put(("pdf_error", str(exc)))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+
+
     def _on_sort_changed(self, _event=None) -> None:
         # Reordena localmente — não precisa consultar a API de novo
         if self.result:
@@ -443,7 +571,17 @@ class ContributorStatsApp(tk.Tk):
         try:
             while True:
                 kind, payload = self._queue.get_nowait()
-                if kind == "progress":
+                if kind == "pdf_progress":
+                    self.var_status.set(payload)
+                elif kind == "pdf_done":
+                    self.btn_pdf_general.configure(state="normal")
+                    self.var_status.set(f"PDF geral salvo: {payload}")
+                    messagebox.showinfo("PDF geral", f"Relatório salvo em:\n{payload}", parent=self)
+                elif kind == "pdf_error":
+                    self.btn_pdf_general.configure(state="normal")
+                    self.var_status.set("Falha ao exportar PDF geral.")
+                    messagebox.showerror("PDF geral", payload, parent=self)
+                elif kind == "progress":
                     self._on_progress(payload)  # type: ignore[arg-type]
                 elif kind == "done":
                     self._on_done(payload)  # type: ignore[arg-type]
@@ -473,6 +611,7 @@ class ContributorStatsApp(tk.Tk):
         self.lbl_repo.configure(
             text=result.full_name)
         self.btn_export.configure(state="normal" if result.contributors else "disabled")
+        self.btn_pdf_general.configure(state="normal" if result.contributors else "disabled")
         self._on_finished(
             f"Análise de {result.full_name} concluída às {datetime.now():%H:%M:%S} · "
             f"{len(result.contributors)} colaborador(es).", "success")
