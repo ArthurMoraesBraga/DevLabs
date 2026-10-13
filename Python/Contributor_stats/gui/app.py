@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import queue
 import threading
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import tkinter as tk
 import webbrowser
 from datetime import datetime
@@ -314,8 +316,10 @@ class ContributorStatsApp(tk.Tk):
         self.btn_export.grid(row=0, column=3, padx=(8, 0))
         self.btn_details = ttk.Button(head, text="Ver Detalhes", command=self.abrir_detalhes)
         self.btn_details.grid(row=0, column=4, padx=(8,0))
-        self.btn_pdf_general = ttk.Button(head, text="PDF geral", command=self.export_pdf_general, state="disabled")
+        self.btn_pdf_general = ttk.Button(head, text="PDF completo", command=self.export_pdf_general, state="disabled")
         self.btn_pdf_general.grid(row=0, column=5, padx=(8,0))
+        self.btn_pdf_quick = ttk.Button(head, text="PDF rápido", command=self.export_pdf_quick, state="disabled")
+        self.btn_pdf_quick.grid(row=0, column=6, padx=(8,0))
 
 
         self.tree = ttk.Treeview(tb, columns=list(COLUMNS), show="headings", selectmode="browse")
@@ -506,56 +510,70 @@ class ContributorStatsApp(tk.Tk):
         self._log(ProgressEvent(f"Ranking exportado para {saved}", "success"))
         self.var_status.set(f"CSV salvo em {saved}")
 
+    def export_pdf_quick(self):
+        """Ranking e gráficos sem novas consultas ao GitHub."""
+        if not self.result or not self.result.contributors:
+            return
+        path = filedialog.asksaveasfilename(
+            parent=self, title="Salvar PDF rápido", defaultextension=".pdf",
+            initialfile=f"{self.result.repo}_relatorio_rapido.pdf",
+            filetypes=[("PDF", "*.pdf")])
+        if not path:
+            return
+        result = self.result
+        self.btn_pdf_quick.configure(text="Gerando PDF...", state="disabled")
+
+        def worker():
+            try:
+                from core.pdf_generator import gerar_pdf_rapido
+                start = time.perf_counter()
+                gerar_pdf_rapido(result, path)
+                self._queue.put(("pdf_quick_done", (path, time.perf_counter() - start)))
+            except Exception as exc:
+                self._queue.put(("pdf_quick_error", str(exc)))
+
+        threading.Thread(target=worker, daemon=True).start()
+
     def export_pdf_general(self):
         if not self.result or not self.result.contributors:
             return
         path = filedialog.asksaveasfilename(
-            title="Salvar relatório geral", defaultextension=".pdf",
+            parent=self, title="Salvar relatório completo", defaultextension=".pdf",
             initialfile=f"{self.result.repo}_relatorio_geral.pdf",
             filetypes=[("PDF", "*.pdf")])
         if not path:
             return
         result = self.result
         token = self.var_token.get().strip() or None
-        self.btn_pdf_general.configure(
-            text="Gerando PDF...",
-            state="disabled"
-        )
-        self.var_status.set("Coletando dados complementares para o PDF geral...")
-
+        self.btn_pdf_general.configure(text="Gerando PDF...", state="disabled")
+        self.var_status.set("Preparando análise detalhada para PDF...")
 
         def worker():
+            started = time.perf_counter()
             try:
                 extra = {}
                 total = len(result.contributors)
+                # Cada análise usa seu próprio GitHubClient/Session.
+                with ThreadPoolExecutor(max_workers=3) as pool:
+                    futures = {
+                        pool.submit(analyze_contributor, result.owner, result.repo, c.username, token): c.username
+                        for c in result.contributors
+                    }
+                    for index, future in enumerate(as_completed(futures), 1):
+                        username = futures[future]
+                        extra[username] = future.result()
+                        self._queue.put(("pdf_progress", f"Analisados {index}/{total}: {username}"))
 
-                for index, contributor in enumerate(result.contributors, 1):
-                    self._queue.put((
-                        "pdf_progress",
-                        f"Analisando {index}/{total}: {contributor.username}"
-                    ))
-
-                    extra[contributor.username] = analyze_contributor(
-                        result.owner,
-                        result.repo,
-                        contributor.username,
-                        token
-                    )
-
-                self._queue.put((
-                    "pdf_progress",
-                    "Montando relatório PDF..."
-                ))
-
+                elapsed_api = time.perf_counter() - started
+                self._queue.put(("pdf_progress", "Montando relatório PDF..."))
+                pdf_started = time.perf_counter()
                 gerar_pdf_geral(result, path, extra)
-
-                self._queue.put(("pdf_done", path))
-
+                elapsed_pdf = time.perf_counter() - pdf_started
+                self._queue.put(("pdf_done", (path, elapsed_api, elapsed_pdf)))
             except Exception as exc:
                 self._queue.put(("pdf_error", str(exc)))
 
         threading.Thread(target=worker, daemon=True).start()
-
 
 
     def _on_sort_changed(self, _event=None) -> None:
@@ -577,16 +595,25 @@ class ContributorStatsApp(tk.Tk):
                 if kind == "pdf_progress":
                     self.var_status.set(payload)
                 elif kind == "pdf_done":
-                    self.btn_pdf_general.configure(
-                        text="PDF geral",
-                        state="normal"
-                        )
-                    self.var_status.set(f"PDF geral salvo: {payload}")
-                    messagebox.showinfo("PDF geral", f"Relatório salvo em:\n{payload}", parent=self)
+                    path, api_seconds, pdf_seconds = payload
+                    self.btn_pdf_general.configure(text="PDF completo", state="normal")
+                    self.var_status.set(f"PDF completo salvo: {path}")
+                    self._log(ProgressEvent(f"PDF completo: API {api_seconds:.1f}s, montagem {pdf_seconds:.1f}s", "success"))
+                    messagebox.showinfo("PDF completo", f"Relatório salvo em:\n{path}", parent=self)
                 elif kind == "pdf_error":
-                    self.btn_pdf_general.configure(state="normal")
-                    self.var_status.set("Falha ao exportar PDF geral.")
-                    messagebox.showerror("PDF geral", payload, parent=self)
+                    self.btn_pdf_general.configure(text="PDF completo", state="normal")
+                    self.var_status.set("Falha ao exportar PDF completo.")
+                    messagebox.showerror("PDF completo", payload, parent=self)
+                elif kind == "pdf_quick_done":
+                    path, elapsed = payload
+                    self.btn_pdf_quick.configure(text="PDF rápido", state="normal")
+                    self.var_status.set(f"PDF rápido salvo: {path}")
+                    self._log(ProgressEvent(f"PDF rápido montado em {elapsed:.1f}s", "success"))
+                    messagebox.showinfo("PDF rápido", f"Relatório salvo em:\n{path}", parent=self)
+                elif kind == "pdf_quick_error":
+                    self.btn_pdf_quick.configure(text="PDF rápido", state="normal")
+                    self.var_status.set("Falha ao exportar PDF rápido.")
+                    messagebox.showerror("PDF rápido", payload, parent=self)
                 elif kind == "progress":
                     self._on_progress(payload)  # type: ignore[arg-type]
                 elif kind == "done":
@@ -618,6 +645,7 @@ class ContributorStatsApp(tk.Tk):
             text=result.full_name)
         self.btn_export.configure(state="normal" if result.contributors else "disabled")
         self.btn_pdf_general.configure(state="normal" if result.contributors else "disabled")
+        self.btn_pdf_quick.configure(state="normal" if result.contributors else "disabled")
         self._on_finished(
             f"Análise de {result.full_name} concluída às {datetime.now():%H:%M:%S} · "
             f"{len(result.contributors)} colaborador(es).", "success")

@@ -7,6 +7,8 @@ from datetime import date, datetime, timezone
 from typing import Optional
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from . import config
 from .exceptions import (
@@ -50,6 +52,15 @@ class GitHubClient:
         )
         if token:
             self.session.headers["Authorization"] = f"Bearer {token}"
+        # Repetições moderadas apenas para falhas transitórias, sem insistir
+        # quando o GitHub indicar limite de requisições.
+        if session is None:
+            retries = Retry(total=2, backoff_factor=0.5,
+                            status_forcelist=(500, 502, 503, 504),
+                            allowed_methods=frozenset(('GET',)),
+                            respect_retry_after_header=True)
+            adapter = HTTPAdapter(max_retries=retries, pool_connections=4, pool_maxsize=4)
+            self.session.mount('https://', adapter)
 
     # ------------------------------------------------------------------ #
     # Infraestrutura

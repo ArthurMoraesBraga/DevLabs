@@ -6,6 +6,7 @@ from pathlib import PurePosixPath
 
 from .github_client import GitHubClient
 from .exceptions import GitHubAPIError
+from .detail_cache import cache_key, get_or_compute
 
 EXTENSIONS = {'.py':'Python','.java':'Java','.js':'JavaScript','.jsx':'JavaScript (JSX)',
  '.ts':'TypeScript','.tsx':'TypeScript (TSX)','.html':'HTML','.css':'CSS','.scss':'SCSS',
@@ -47,79 +48,107 @@ def _pages(client, path, params=None, max_pages=10):
     return results, True
 
 
-def analyze_contributor(owner, repo, username, token=None, client=None, max_pages=10, max_commits=250):
-    """Coleta PRs, revisões, issues e arquivos. Pode exigir muitas chamadas à API."""
-    client = client or GitHubClient(token)
-    result = DetailStats(username=username)
-    base = f'/repos/{owner}/{repo}'
-    issues, truncated = _pages(client, f'{base}/issues', {'state':'all'}, max_pages)
-    if truncated:
-        result.warnings.append('Issues: limite de paginação atingido; contagem parcial.')
-    for issue in issues:
-        if 'pull_request' in issue:
-            continue
-        if (issue.get('user') or {}).get('login','').lower() == username.lower():
-            result.issues_opened += 1
-            if issue.get('state') == 'closed':
-                result.issues_closed += 1
+def _shared_repo_data(client, base, max_pages):
+    """Issues, PRs e revisões são comuns a TODOS os colaboradores.
 
-    prs, truncated = _pages(client, f'{base}/pulls', {'state':'all'}, max_pages)
-    if truncated:
-        result.warnings.append('Pull requests: limite de paginação atingido; contagem parcial.')
-    approved_ids = set()
+    Cada PR é consultado uma única vez por repositório dentro do TTL.
+    """
+    issues, issues_truncated = _pages(client, f'{base}/issues', {'state': 'all'}, max_pages)
+    prs, prs_truncated = _pages(client, f'{base}/pulls', {'state': 'all'}, max_pages)
+    review_counts = Counter()
+    approvals = {}
+    review_warnings = []
     for pr in prs:
         number = pr['number']
-        own = (pr.get('user') or {}).get('login','').lower() == username.lower()
-        if own:
+        reviews, truncated = _pages(client, f'{base}/pulls/{number}/reviews', max_pages=2)
+        if truncated:
+            review_warnings.append(f'Revisões do PR #{number}: dados parciais.')
+        for review in reviews:
+            login = (review.get('user') or {}).get('login', '').lower()
+            if not login:
+                continue
+            state = review.get('state')
+            if state in ('APPROVED', 'CHANGES_REQUESTED', 'COMMENTED'):
+                review_counts[login] += 1
+            if state == 'APPROVED':
+                approvals.setdefault(login, set()).add(number)
+    return issues, issues_truncated, prs, prs_truncated, review_counts, approvals, review_warnings
+
+
+def analyze_contributor(owner, repo, username, token=None, client=None, max_pages=10, max_commits=250):
+    """Análise completa com cache TTL e reutilização das consultas do repositório."""
+    injected_client = client is not None
+    client = client or GitHubClient(token)
+    base = f'/repos/{owner}/{repo}'
+    user_key = cache_key(owner, repo, token, 'contributor', username.lower(), max_pages, max_commits)
+    shared_key = cache_key(owner, repo, token, 'shared', max_pages)
+
+    def compute():
+        result = DetailStats(username=username)
+        issues, issues_truncated, prs, prs_truncated, review_counts, approvals, review_warnings = get_or_compute(
+            shared_key, lambda: _shared_repo_data(client, base, max_pages)
+        )
+        if issues_truncated:
+            result.warnings.append('Issues: limite de paginação atingido; contagem parcial.')
+        if prs_truncated:
+            result.warnings.append('Pull requests: limite de paginação atingido; contagem parcial.')
+        result.warnings.extend(review_warnings)
+        login = username.lower()
+        for issue in issues:
+            if 'pull_request' in issue:
+                continue
+            if (issue.get('user') or {}).get('login', '').lower() == login:
+                result.issues_opened += 1
+                if issue.get('state') == 'closed':
+                    result.issues_closed += 1
+        for pr in prs:
+            if (pr.get('user') or {}).get('login', '').lower() != login:
+                continue
             if pr.get('state') == 'open':
                 result.prs_open += 1
             elif pr.get('merged_at'):
                 result.prs_merged += 1
             else:
                 result.prs_closed_unmerged += 1
-        reviews, rev_truncated = _pages(client, f'{base}/pulls/{number}/reviews', max_pages=2)
-        if rev_truncated:
-            result.warnings.append(f'Revisões do PR #{number}: dados parciais.')
-        for review in reviews:
-            if (review.get('user') or {}).get('login','').lower() == username.lower():
-                if review.get('state') in ('APPROVED','CHANGES_REQUESTED','COMMENTED'):
-                    result.reviews += 1
-                if review.get('state') == 'APPROVED':
-                    approved_ids.add(number)
-    result.prs_approved = len(approved_ids)
+        result.reviews = review_counts[login]
+        result.prs_approved = len(approvals.get(login, ()))
 
-    commits, truncated = _pages(client, f'{base}/commits', {'author':username}, max_pages)
-    if truncated:
-        result.warnings.append('Commits: limite de paginação atingido; dados parciais.')
-    if len(commits) > max_commits:
-        result.warnings.append(f'Arquivos: amostra dos {max_commits} commits mais recentes.')
-    paths = set()
-    directories, languages, timeline = Counter(), Counter(), Counter()
-    for commit in commits:
-        dt = ((commit.get('commit') or {}).get('author') or {}).get('date')
-        if dt:
-            try:
-                month = datetime.fromisoformat(dt.replace('Z','+00:00')).strftime('%Y-%m')
-                timeline[month] += 1
-            except ValueError:
-                pass
-    for commit in commits[:max_commits]:
-        sha = commit.get('sha')
-        if not sha:
-            continue
-        response = client._get(f'{base}/commits/{sha}')
-        if response.status_code != 200:
-            raise client._error_from_response(response)
-        for f in response.json().get('files',[]):
-            path = f.get('filename','')
-            if not path:
+        commits, truncated = _pages(client, f'{base}/commits', {'author': username}, max_pages)
+        if truncated:
+            result.warnings.append('Commits: limite de paginação atingido; dados parciais.')
+        if len(commits) > max_commits:
+            result.warnings.append(f'Arquivos: amostra dos {max_commits} commits mais recentes.')
+        paths = set()
+        directories, languages, timeline = Counter(), Counter(), Counter()
+        for commit in commits:
+            dt = ((commit.get('commit') or {}).get('author') or {}).get('date')
+            if dt:
+                try:
+                    timeline[datetime.fromisoformat(dt.replace('Z', '+00:00')).strftime('%Y-%m')] += 1
+                except ValueError:
+                    pass
+        for commit in commits[:max_commits]:
+            sha = commit.get('sha')
+            if not sha:
                 continue
-            paths.add(path)
-            parts = PurePosixPath(path).parts
-            directories[parts[0] if len(parts)>1 else 'raiz'] += 1
-            languages[EXTENSIONS.get(PurePosixPath(path).suffix.lower(),'Outros')] += 1
-    result.files_changed = len(paths)
-    result.directories = dict(directories.most_common())
-    result.languages = dict(languages.most_common())
-    result.timeline = dict(sorted(timeline.items()))
-    return result
+            response = client._get(f'{base}/commits/{sha}')
+            if response.status_code != 200:
+                raise client._error_from_response(response)
+            for f in response.json().get('files', []):
+                path = f.get('filename', '')
+                if not path:
+                    continue
+                paths.add(path)
+                parts = PurePosixPath(path).parts
+                directories[parts[0] if len(parts) > 1 else 'raiz'] += 1
+                languages[EXTENSIONS.get(PurePosixPath(path).suffix.lower(), 'Outros')] += 1
+        result.files_changed = len(paths)
+        result.directories = dict(directories.most_common())
+        result.languages = dict(languages.most_common())
+        result.timeline = dict(sorted(timeline.items()))
+        return result
+
+    # Clientes injetados são usados em testes e não compartilham cache global.
+    if injected_client:
+        return compute()
+    return get_or_compute(user_key, compute)

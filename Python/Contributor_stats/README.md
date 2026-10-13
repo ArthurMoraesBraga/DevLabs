@@ -1,238 +1,596 @@
-# 🚀 Projeto GitHubAPI ContributorStats
 
-O **GitHubAPI ContributorStats** é uma ferramenta Python para analisar repositórios do GitHub (públicos e **privados**) e gerar um **ranking detalhado dos colaboradores** com base em métricas reais de código. Ela usa o Token de Acesso Pessoal (PAT) do GitHub para acessar os dados e trata o processamento assíncrono das estatísticas da API (*polling* da resposta `202 Accepted`).
+<div align="center">
+
+<h1>📊 Contributor Stats</h1>
+
+<p>
+  Aplicação desenvolvida em Python para analisar repositórios do GitHub,
+  visualizar estatísticas de colaboradores e gerar relatórios detalhados.
+</p>
+
+<p>
+  <img src="https://skillicons.dev/icons?i=python,github,git,vscode" alt="Tecnologias utilizadas"/>
+</p>
+
+<p>
+  <strong>Python • Tkinter • GitHub REST API • ReportLab</strong>
+</p>
+
+</div>
+
+<hr>
+
+<h2>📌 Sobre o projeto</h2>
+
+<p>
+  O <strong>Contributor Stats</strong> é uma ferramenta que permite analisar
+  a participação dos colaboradores em repositórios do GitHub.
+</p>
+
+<p>
+  A aplicação coleta dados diretamente da API do GitHub e apresenta
+  um ranking de contribuição, estatísticas de código, gráficos,
+  informações individuais e relatórios em PDF.
+</p>
+
+<p>
+  O projeto possui uma interface gráfica desenvolvida com
+  <strong>Tkinter e ttk</strong>, além de uma versão que pode ser
+  executada diretamente pelo terminal.
+</p>
+
+<h2>🚀 Funcionalidades</h2>
+
+<ul>
+  <li>Análise de repositórios públicos e privados do GitHub.</li>
+  <li>Ranking dos colaboradores por diferentes critérios.</li>
+  <li>Quantidade de commits realizados.</li>
+  <li>Total de linhas adicionadas e removidas.</li>
+  <li>Cálculo do impacto líquido das contribuições.</li>
+  <li>Identificação da última atividade dos colaboradores.</li>
+  <li>Visualização de gráficos comparativos.</li>
+  <li>Consulta de informações detalhadas de cada colaborador.</li>
+  <li>Análise de Pull Requests, Issues e reviews.</li>
+  <li>Informações sobre arquivos, diretórios e linguagens.</li>
+  <li>Exportação dos dados para CSV.</li>
+  <li>Geração de relatórios PDF individuais e gerais.</li>
+  <li>Interface com temas claro e escuro.</li>
+  <li>Registro do andamento das análises.</li>
+</ul>
+
+<h2>⚡ Otimizações de desempenho</h2>
+
+<p>
+  O projeto conta com melhorias para diminuir o tempo necessário
+  para consultar informações do GitHub e gerar relatórios.
+</p>
+
+<ul>
+  <li>
+    <strong>Cache inteligente:</strong> reutiliza dados já consultados
+    e reduz requisições repetidas.
+  </li>
+  <li>
+    <strong>Consultas paralelas:</strong> permite analisar até três
+    colaboradores simultaneamente na geração do PDF completo.
+  </li>
+  <li>
+    <strong>Reaproveitamento de informações:</strong> evita consultar
+    novamente dados compartilhados entre colaboradores.
+  </li>
+  <li>
+    <strong>Tratamento de erros:</strong> lida com falhas de conexão,
+    timeouts e respostas inesperadas da API.
+  </li>
+  <li>
+    <strong>Interface responsiva:</strong> utiliza threads e filas
+    para executar análises sem bloquear a janela principal.
+  </li>
+</ul>
+
+<h2>📄 Relatórios PDF</h2>
+
+<h3>1. PDF rápido</h3>
+
+<p>
+  Gera um relatório resumido utilizando as informações já coletadas
+  na análise principal, evitando novas consultas à API.
+</p>
+
+<ul>
+  <li>Identificação do repositório.</li>
+  <li>Ranking dos colaboradores.</li>
+  <li>Quantidade de commits.</li>
+  <li>Linhas adicionadas e removidas.</li>
+  <li>Impacto líquido.</li>
+  <li>Estatísticas e gráficos gerais.</li>
+</ul>
+
+<h3>2. PDF completo</h3>
+
+<p>
+  Gera um relatório mais detalhado, incluindo informações adicionais
+  dos colaboradores, como Pull Requests, Issues, reviews,
+  histórico de atividade, arquivos e linguagens.
+</p>
+
+<p>
+  Esse modo utiliza cache e processamento paralelo para
+  reduzir o tempo de geração.
+</p>
+
+<h2>🖥️ Interface gráfica</h2>
+
+<p>O aplicativo possui uma interface com opções de tema claro e escuro.</p>
+
+<div align="center">
+  <h3>Tema escuro</h3>
+  <img src="assets/screenshot_gui_dark.png" alt="Interface no tema escuro" width="800"/>
+
+  <h3>Tema claro</h3>
+  <img src="assets/screenshot_gui_light.png" alt="Interface no tema claro" width="800"/>
+</div>
+
+<h2>🛠️ Tecnologias utilizadas</h2>
+
+<table>
+  <tr>
+    <th>Tecnologia</th>
+    <th>Utilização</th>
+  </tr>
+  <tr>
+    <td>Python</td>
+    <td>Linguagem principal da aplicação.</td>
+  </tr>
+  <tr>
+    <td>Tkinter / ttk</td>
+    <td>Desenvolvimento da interface gráfica.</td>
+  </tr>
+  <tr>
+    <td>GitHub REST API</td>
+    <td>Coleta de informações dos repositórios.</td>
+  </tr>
+  <tr>
+    <td>Requests</td>
+    <td>Comunicação HTTP com a API.</td>
+  </tr>
+  <tr>
+    <td>ReportLab</td>
+    <td>Criação dos relatórios PDF.</td>
+  </tr>
+  <tr>
+    <td>Threading</td>
+    <td>Execução de tarefas em segundo plano.</td>
+  </tr>
+  <tr>
+    <td>Concurrent Futures</td>
+    <td>Processamento paralelo controlado.</td>
+  </tr>
+  <tr>
+    <td>CSV</td>
+    <td>Exportação de estatísticas.</td>
+  </tr>
+</table>
+
+<hr>
+
+<h2>📁 Estrutura do projeto</h2>
+
+<pre>
+Contributor_stats/
+│
+├── assets/
+│   ├── screenshot_gui_dark.png
+│   └── screenshot_gui_light.png
+│
+├── core/
+│   ├── config.py
+│   ├── github_client.py
+│   ├── service.py
+│   ├── contributor_analysis.py
+│   ├── activity_analysis.py
+│   ├── file_analysis.py
+│   ├── detail_cache.py
+│   ├── pdf_generator.py
+│   ├── ranking.py
+│   ├── exporter.py
+│   ├── models.py
+│   ├── repo_url.py
+│   └── exceptions.py
+│
+├── gui/
+│   ├── app.py
+│   ├── contributor_details.py
+│   ├── activity_chart.py
+│   ├── theme.py
+│   └── widgets.py
+│
+├── main_gui.py
+├── contributor_stats.py
+├── test_optimizations.py
+├── requirements.txt
+└── README.md
+</pre>
+
+<h3>📦 Pasta core</h3>
+
+<p>Contém a lógica principal do projeto.</p>
+
+<ul>
+  <li><code>config.py</code>: configurações da aplicação e token do GitHub.</li>
+  <li><code>github_client.py</code>: comunicação com a API do GitHub.</li>
+  <li><code>service.py</code>: coordenação da análise do repositório.</li>
+  <li><code>contributor_analysis.py</code>: análise detalhada de colaboradores.</li>
+  <li><code>activity_analysis.py</code>: análise de atividades ao longo do tempo.</li>
+  <li><code>file_analysis.py</code>: funcionalidades relacionadas à análise de arquivos.</li>
+  <li><code>detail_cache.py</code>: armazenamento temporário de dados analisados.</li>
+  <li><code>pdf_generator.py</code>: geração dos relatórios PDF.</li>
+  <li><code>ranking.py</code>: classificação dos colaboradores.</li>
+  <li><code>exporter.py</code>: exportação para CSV.</li>
+  <li><code>models.py</code>: estruturas de dados utilizadas pelo sistema.</li>
+  <li><code>repo_url.py</code>: interpretação das URLs dos repositórios.</li>
+  <li><code>exceptions.py</code>: tratamento de erros específicos.</li>
+</ul>
+
+<h3>🎨 Pasta gui</h3>
+
+<p>Contém os componentes da interface gráfica.</p>
+
+<ul>
+  <li><code>app.py</code>: janela principal e interação com o usuário.</li>
+  <li><code>contributor_details.py</code>: exibição dos detalhes dos colaboradores.</li>
+  <li><code>activity_chart.py</code>: gráficos de atividade.</li>
+  <li><code>theme.py</code>: estilos e temas da aplicação.</li>
+  <li><code>widgets.py</code>: componentes visuais reutilizáveis.</li>
+</ul>
+
+<hr>
+
+<h2>⚙️ Pré-requisitos</h2>
+
+<p>Antes de executar o projeto, instale:</p>
+
+<ul>
+  <li>Python 3.9 ou superior.</li>
+  <li>Git, caso deseje clonar o repositório.</li>
+  <li>Visual Studio Code ou outro editor de sua preferência.</li>
+  <li>Conexão com a internet para consultar a API do GitHub.</li>
+</ul>
+
+<p>
+  Download do Python:
+  <a href="https://www.python.org/downloads/">python.org/downloads</a>
+</p>
+
+<p>
+  Durante a instalação no Windows, habilite a opção
+  <strong>Add Python to PATH</strong>, quando disponível.
+</p>
+
+<h2>📥 Instalação do projeto</h2>
+
+<h3>1. Clonar o repositório</h3>
+
+<pre><code>git clone URL_DO_SEU_REPOSITORIO
+</code></pre>
+
+<p>Depois, entre na pasta do projeto:</p>
+
+<pre><code>cd Contributor_stats
+</code></pre>
+
+<p>
+  Caso tenha baixado o projeto em ZIP, basta extrair os arquivos
+  e abrir a pasta no terminal.
+</p>
+
+<h3>2. Verificar a instalação do Python</h3>
+
+<pre><code>python --version
+</code></pre>
+
+<p>Se o comando não funcionar no Windows, tente:</p>
+
+<pre><code>py --version
+</code></pre>
+
+<h3>3. Criar o ambiente virtual (.venv)</h3>
+
+<p>
+  O ambiente virtual permite instalar as dependências do projeto
+  separadamente das bibliotecas globais do computador.
+</p>
+
+<pre><code>python -m venv .venv
+</code></pre>
+
+<p>
+  Se necessário, utilize <code>py -m venv .venv</code>.
+</p>
+
+<h3>4. Ativar o ambiente virtual</h3>
+
+<p><strong>Windows - CMD:</strong></p>
+
+<pre><code>.venv\Scripts\activate.bat
+</code></pre>
+
+<p><strong>Windows - PowerShell:</strong></p>
+
+<pre><code>.\.venv\Scripts\Activate.ps1
+</code></pre>
+
+<p><strong>Linux / macOS:</strong></p>
+
+<pre><code>source .venv/bin/activate
+</code></pre>
+
+<p>
+  Quando o ambiente estiver ativo, o terminal deverá apresentar
+  <code>(.venv)</code> antes do caminho da pasta.
+</p>
+
+<h3>5. Atualizar o pip</h3>
+
+<pre><code>python -m pip install --upgrade pip
+</code></pre>
+
+<h3>6. Instalar as dependências</h3>
+
+<pre><code>python -m pip install -r requirements.txt
+</code></pre>
+
+<p>
+  O arquivo <code>requirements.txt</code> contém as bibliotecas
+  externas necessárias:
+</p>
+
+<pre><code>requests&gt;=2.31
+reportlab&gt;=4.0
+</code></pre>
+
+<p>
+  Também é possível instalá-las individualmente:
+</p>
+
+<pre><code>python -m pip install requests reportlab
+</code></pre>
+
+<p>
+  O Tkinter faz parte da instalação padrão do Python no Windows.
+  Não é necessário instalá-lo pelo pip.
+</p>
+
+<hr>
+
+<h2>🔑 Configuração do token do GitHub</h2>
+
+<p>
+  Para consultar repositórios privados, é necessário utilizar
+  um token com as permissões adequadas.
+</p>
+
+<p>
+  O token também ajuda a aumentar o limite de requisições
+  disponíveis para consultas autenticadas.
+</p>
+
+<p>
+  Gere seu token em:
+  <a href="https://github.com/settings/tokens">
+    GitHub Personal Access Tokens
+  </a>
+</p>
+
+<p>
+  É recomendado configurar o token por uma variável de ambiente,
+  evitando armazená-lo diretamente no código-fonte.
+</p>
+
+<p><strong>Windows - PowerShell:</strong></p>
+
+<pre><code>$env:GITHUB_TOKEN="SEU_TOKEN_AQUI"
+</code></pre>
+
+<p><strong>Windows - CMD:</strong></p>
+
+<pre><code>set GITHUB_TOKEN=SEU_TOKEN_AQUI
+</code></pre>
+
+<p>
+  Essa configuração vale para a sessão atual do terminal.
+  O arquivo <code>core/config.py</code> também possui configurações
+  relacionadas ao token.
+</p>
 
-O projeto pode ser usado de duas formas:
+<p>
+  <strong>Atenção:</strong> não publique tokens reais no GitHub.
+  Caso exista um token fixo em <code>core/config.py</code>,
+  remova-o antes de publicar o repositório.
+</p>
 
-- 🖥️ **Interface gráfica** moderna em **Tkinter + ttk**, com tema claro/escuro, indicadores, tabela ordenável, gráfico Top 10 e exportação para CSV;
-- ⌨️ **Linha de comando (CLI)**, ideal para automatizar e gerar o CSV direto no terminal.
+<h2>▶️ Como executar</h2>
 
-### 🎯 Objetivo
+<h3>1. Interface gráfica</h3>
 
-Mostrar com clareza quem mais contribuiu para um repositório, não só pela quantidade de *commits*, mas também pelo **volume de linhas de código** adicionadas e removidas (**Impacto Líquido**). O resultado pode ser exportado para um arquivo CSV.
+<p>
+  Com o ambiente virtual ativado e as dependências instaladas,
+  execute:
+</p>
 
----
+<pre><code>python main_gui.py
+</code></pre>
 
-## 🖼️ Interface gráfica
+<p>
+  A janela principal será aberta. Informe a URL do repositório,
+  configure o token quando necessário e inicie a análise.
+</p>
 
-![Interface gráfica do GitHub Contributor Stats (tema escuro)](assets/screenshot_gui_dark.png)
+<h3>2. Interface de linha de comando (CLI)</h3>
 
-<details>
-<summary>Ver tema claro</summary>
+<p>
+  Também é possível analisar um repositório diretamente pelo terminal.
+</p>
 
-![Interface gráfica do GitHub Contributor Stats (tema claro)](assets/screenshot_gui_light.png)
+<pre><code>python contributor_stats.py https://github.com/usuario/repositorio
+</code></pre>
 
-</details>
+<p>Exemplo utilizando apenas o identificador do repositório:</p>
 
-> As capturas usam os dados de exemplo (`aluno1`…`aluno6`) mostrados na seção da CLI.
+<pre><code>python contributor_stats.py usuario/repositorio
+</code></pre>
 
-**Recursos da interface**
+<h3>3. Opções adicionais da CLI</h3>
 
-- Campo de URL que aceita `https://github.com/dono/repo`, `.git`, links com `/tree/...`, SSH (`git@github.com:dono/repo.git`) ou só `dono/repo`;
-- Token mascarado (botão **Mostrar/Ocultar**), preenchido automaticamente com o token definido em `core/config.py`;
-- A análise roda em segundo plano: a janela não trava, há barra de progresso e botão **Cancelar** (ou `Esc`);
-- Cartões com o total de colaboradores, commits, linhas inseridas/deletadas e impacto líquido;
-- Tabela com destaque para o Top 3, **ordenação ao clicar no cabeçalho** e **filtro** por usuário;
-- Duplo clique abre o perfil do colaborador no GitHub; o botão direito permite copiar o nome de usuário;
-- Gráfico de barras Top 10 por commits, linhas inseridas, deletadas ou impacto líquido;
-- Troca do critério do ranking **sem nova consulta à API**;
-- Aba **Log de execução** com o histórico de cada etapa;
-- **Exportar CSV** (`Ctrl+E` / `Cmd+E`) para o local escolhido;
-- Alternância entre **tema escuro e claro**.
+<p>Exibir a ajuda dos comandos:</p>
 
----
+<pre><code>python contributor_stats.py --help
+</code></pre>
 
-## 🗂️ Estrutura do projeto
+<p>Mostrar os 15 principais colaboradores:</p>
 
-A regra de negócio fica separada da interface: o pacote `core` não usa `print` nem Tkinter e comunica o andamento por *callbacks*. Assim, a CLI e a GUI usam exatamente o mesmo código.
+<pre><code>python contributor_stats.py usuario/repositorio --top 15
+</code></pre>
 
-```
-Projeto GitHubAPI ContributorStats/
-├── core/                    # Regra de negócio (sem interface)
-│   ├── config.py            # 🔑 Seu token (GITHUB_TOKEN) e demais constantes
-│   ├── exceptions.py        # Exceções do domínio
-│   ├── models.py            # Dataclasses: Contributor, AnalysisResult, ProgressEvent
-│   ├── repo_url.py          # Interpretação da URL do repositório
-│   ├── github_client.py     # Cliente da API do GitHub (Session, timeout, erros)
-│   ├── ranking.py           # Montagem e ordenação do ranking
-│   ├── exporter.py          # Exportação para CSV
-│   └── service.py           # Caso de uso: analyze_repository()
-├── gui/                     # Interface gráfica (Tkinter + ttk)
-│   ├── theme.py             # Paletas (escuro/claro), fontes e estilos ttk
-│   ├── widgets.py           # Card, StatCard e BarChart (Canvas)
-│   └── app.py               # Janela principal
-├── assets/                  # Capturas de tela
-├── contributor_stats.py     # Ponto de entrada da CLI
-├── main_gui.py              # Ponto de entrada da GUI
-└── requirements.txt
-```
+<p>Ordenar por impacto líquido:</p>
 
----
+<pre><code>python contributor_stats.py usuario/repositorio --sort impacto
+</code></pre>
 
-## 🛠️ Pré-requisitos
+<p>Exportar para um arquivo CSV específico:</p>
 
-- **Python 3.9+** com **Tkinter** (já incluso no instalador oficial do Windows/macOS; no Linux: `sudo apt install python3-tk`).
-- Um **Personal Access Token (PAT)** do GitHub com o *scope* **`repo`** — obrigatório para repositórios privados. Para repositórios públicos ele é opcional, mas eleva o limite da API de 60 para 5.000 requisições/hora.
+<pre><code>python contributor_stats.py usuario/repositorio --output ranking.csv
+</code></pre>
 
----
+<p>Evitar a busca de datas exatas para acelerar a análise:</p>
 
-## 🐍 Ambiente virtual (recomendado)
+<pre><code>python contributor_stats.py usuario/repositorio --no-exact-dates
+</code></pre>
 
-1. **Crie o ambiente virtual:**
-```bash
-python -m venv .venv
-```
+<hr>
 
-2. **Ative o ambiente virtual:**
+<h2>🧪 Executando os testes</h2>
 
-- **Windows:**
-```bash
-.venv\Scripts\activate
-```
+<p>
+  O projeto possui testes relacionados às otimizações implementadas.
+</p>
 
-- **Linux/macOS:**
-```bash
-source .venv/bin/activate
-```
+<pre><code>python -m unittest test_optimizations.py -v
+</code></pre>
 
-3. **Instale as dependências:**
-```bash
-pip install -r requirements.txt
-```
+<p>
+  Os testes ajudam a verificar o funcionamento do cache,
+  o processamento de colaboradores e a geração de relatórios.
+</p>
 
----
+<h2>🛑 Desativando o ambiente virtual</h2>
 
-## 🔑 Configuração do token
+<p>Quando terminar de utilizar o projeto, execute:</p>
 
-Abra o arquivo **`core/config.py`** e substitua `"SEU_TOKEN_AQUI"` pelo seu PAT:
+<pre><code>deactivate
+</code></pre>
 
-```python
-GITHUB_TOKEN = "ghp_seu_token_aqui"  # !! Substitua pelo seu PAT real !!
-```
+<h2>🧹 Comandos úteis</h2>
 
-Pronto: a CLI usa esse token automaticamente e a interface gráfica já abre com o campo preenchido.
+<p>Listar bibliotecas instaladas:</p>
 
-Se preferir, também é possível informar o token direto no campo da interface gráfica ou com `--token` na CLI (esses valores têm prioridade sobre o do arquivo).
+<pre><code>python -m pip list
+</code></pre>
 
-> ⚠️ **Não faça commit do seu token real.** O GitHub detecta tokens publicados em repositórios públicos e os revoga automaticamente. Antes de dar `git push`, volte o valor para `"SEU_TOKEN_AQUI"`.
-
----
+<p>Verificar as dependências:</p>
 
-## ⚙️ Execução
+<pre><code>python -m pip check
+</code></pre>
 
-### 🖥️ Interface gráfica
+<p>Atualizar as dependências do projeto:</p>
 
-```bash
-python main_gui.py
-```
+<pre><code>python -m pip install --upgrade -r requirements.txt
+</code></pre>
 
-### ⌨️ Linha de comando
+<h2>❗ Problemas comuns</h2>
 
-```bash
-python contributor_stats.py <URL_DO_REPOSITORIO>
-```
+<h3>ModuleNotFoundError</h3>
 
-| Opção | Descrição |
-| :--- | :--- |
-| `repo_url` | URL do repositório (ou `dono/repo`). Se omitida, usa o repositório de exemplo. |
-| `--token TOKEN` | PAT do GitHub (padrão: `GITHUB_TOKEN` de `core/config.py`). |
-| `--sort {commits,impacto,insercoes}` | Critério de ordenação (padrão: `commits`, desempate por impacto líquido). |
-| `--no-exact-dates` | Não consulta a data exata do último commit; usa a semana aproximada (mais rápido). |
-| `--output`, `-o` | Caminho do CSV gerado. |
-| `--top N` | Quantos colaboradores exibir no console (padrão: 10). |
+<p>
+  Geralmente ocorre quando uma biblioteca não foi instalada
+  ou quando o ambiente virtual não está ativo.
+</p>
 
-**Exemplo:**
-```bash
-python contributor_stats.py https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti3-9577100-repoexemplo --top 5
-```
+<pre><code>python -m pip install -r requirements.txt
+</code></pre>
 
-### Exemplo de saída no terminal
+<h3>Erro ao ativar o .venv no PowerShell</h3>
 
-```
-• Buscando estatísticas (tentativa 1/6) de ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti3-9577100-repoexemplo…
-✔ Estatísticas recebidas com sucesso.
-• [0/8] Buscando a data do último commit…
-• [1/8] Último commit de aluno1: 30/09/2025
-...
-✔ Ranking gerado com 8 colaborador(es).
+<p>
+  Caso a execução de scripts esteja bloqueada, utilize o CMD
+  para ativar o ambiente ou configure a política apenas para
+  a sessão atual:
+</p>
 
-✅ Sucesso! Ranking exportado para: ranking_contribuicao_pmg-es-2025-2-ti3-9577100-repoexemplo.csv
+<pre><code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+</code></pre>
 
---- TOP 10 Contribuidores — ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti3-9577100-repoexemplo ---
-1. aluno1 (https://github.com/aluno1)
-   -> Commits: 77 | Inseridas: 39 | Deletadas: 34 | Impacto Líquido: 5 | Último Commit: 30/09/2025
-2. aluno2 (https://github.com/aluno2)
-   -> Commits: 62 | Inseridas: 14322 | Deletadas: 11677 | Impacto Líquido: 2645 | Último Commit: 20/10/2025
-3. aluno3 (https://github.com/aluno3)
-   -> Commits: 29 | Inseridas: 25055 | Deletadas: 19293 | Impacto Líquido: 5762 | Último Commit: 19/10/2025
-...
-8. github-classroom[bot] (https://github.com/apps/github-classroom)
-   -> Commits: 2 | Inseridas: 476 | Deletadas: 0 | Impacto Líquido: 476 | Último Commit: ~18/08/2025
-```
+<p>Depois, execute novamente:</p>
 
-> 💡 Datas com `~` são **aproximadas** (início da última semana com commits). Isso acontece quando a data exata não pode ser obtida — por exemplo, contas *bot* — ou quando se usa `--no-exact-dates`.
+<pre><code>.\.venv\Scripts\Activate.ps1
+</code></pre>
 
-### 📄 Formato do CSV
+<h3>Erro 403 na API do GitHub</h3>
 
-Separado por `;` e salvo em UTF-8 com BOM, para abrir com acentuação correta no Excel:
+<p>
+  Pode indicar limite de requisições, falta de permissão
+  ou restrições de acesso. Verifique o token e aguarde
+  quando necessário.
+</p>
 
-```
-Posição;Nome de Usuário;URL Perfil;Commits Totais;Linhas Inseridas;Linhas Deletadas;Impacto Líquido (Ins - Del);Último Commit
-1;aluno1;https://github.com/aluno1;77;39;34;5;30/09/2025
-```
+<h3>PDF demorando para gerar</h3>
 
----
+<p>
+  O PDF completo realiza consultas adicionais e pode levar
+  mais tempo em repositórios grandes. Utilize o PDF rápido
+  quando precisar apenas do ranking e das estatísticas gerais.
+</p>
 
-## 📊 Principais funções e classes
+<hr>
 
-| Módulo | Elemento | Propósito |
-| :--- | :--- | :--- |
-| `core/repo_url.py` | `parse_repo_url(repo_url) -> tuple[str, str]` | Extrai **dono** e **repositório** de vários formatos de URL; lança `InvalidRepoURLError`. |
-| `core/github_client.py` | `GitHubClient.fetch_contributors_stats(owner, repo, ...)` | Consulta `/stats/contributors` com **polling** cancelável para o status `202`. |
-| `core/github_client.py` | `GitHubClient.fetch_last_commit_date(owner, repo, username)` | Data exata do último commit do usuário (ou `None`). |
-| `core/ranking.py` | `build_contributors(data)` | Converte o JSON da API em objetos `Contributor` (soma inserções/deleções). |
-| `core/ranking.py` | `rank_contributors(contributors, criterion)` | Ordena por `SortCriterion` e define a posição. |
-| `core/exporter.py` | `export_to_csv(contributors, path)` | Grava o ranking em CSV. |
-| `core/service.py` | `analyze_repository(repo_url, token, ...)` | Orquestra todo o fluxo e devolve um `AnalysisResult`. |
-| `gui/app.py` | `ContributorStatsApp` | Janela principal Tkinter/ttk. |
-| `contributor_stats.py` | `main(argv)` | CLI: argumentos, progresso no terminal e Top N. |
+<h2>🔒 Segurança</h2>
 
----
+<ul>
+  <li>Não compartilhe seu token pessoal.</li>
+  <li>Não envie credenciais para repositórios públicos.</li>
+  <li>Utilize tokens com as permissões mínimas necessárias.</li>
+  <li>Não versione a pasta <code>.venv</code>.</li>
+  <li>Revogue imediatamente qualquer token exposto.</li>
+</ul>
 
-## ✨ Melhorias em relação à versão anterior
+<h2>📚 Objetivo do desenvolvimento</h2>
 
-| Antes | Agora |
-| :--- | :--- |
-| Token definido no meio do script principal. | Token em um único lugar, `core/config.py`, com opção de informá-lo pela interface ou por `--token`. |
-| A verificação do token comparava com `"SEU_TOKEN_AQUI"`, mas o *placeholder* era `"ghp_###..."`, então nunca funcionava. | Se o token não for substituído, o programa avisa e segue apenas para repositórios públicos. |
-| Requisições sem `timeout` podiam travar indefinidamente. | Todas as requisições têm `timeout` e usam `requests.Session` (reaproveita conexões). |
-| `contributor['author']` nulo (conta excluída) causava `TypeError`. | Tratado como “(usuário desconhecido)”. |
-| Uma requisição **sequencial** por colaborador para buscar a data do último commit. | Requisições **em paralelo** (`ThreadPoolExecutor`) e opção para desativá-las. |
-| `N/A` quando a data não podia ser obtida (ex.: bots). | Data aproximada a partir das semanas com commits (marcada com `~`). |
-| Erros 401/404/limite de requisições exibiam só o código HTTP. | Mensagens explicativas, incluindo o horário de renovação do limite. |
-| `print` e `sys.exit` dentro das funções: impossível reaproveitar em uma GUI. | Exceções próprias + *callbacks* de progresso; CLI e GUI compartilham o mesmo `core`. |
-| URL aceita apenas no formato `https://github.com/dono/repo`. | Aceita também `.git`, `/tree/...`, SSH e `dono/repo`; rejeita hosts que não sejam do GitHub. |
-| Cabeçalho `Authorization: token` e `Accept` v3. | `Authorization: Bearer`, `application/vnd.github+json` e `X-GitHub-Api-Version`. |
-| Espera fixa com `time.sleep` durante o *polling*. | Espera cancelável (`threading.Event.wait`). |
-| CSV sem posição e com acentos quebrados no Excel. | Coluna **Posição** e codificação `utf-8-sig`. |
-| Critério de ordenação só por comentário no código. | `--sort` / seletor na interface (commits, impacto líquido ou linhas inseridas). |
+<p>
+  O Contributor Stats foi desenvolvido para explorar conceitos
+  de integração com APIs REST, processamento de dados,
+  programação modular, interfaces gráficas e geração de relatórios.
+</p>
 
-> ⚠️ **Limitação da API:** para repositórios com mais de 10.000 commits, o GitHub retorna `0` em inserções e deleções no endpoint `/stats/contributors`. A contagem de commits continua correta.
+<p>
+  O projeto também aplica técnicas de otimização,
+  como cache, paralelismo controlado e processamento
+  em segundo plano.
+</p>
 
----
+<hr>
 
-## 📚 Documentação e Links Úteis
+<div align="center">
 
-- 🔑 **Página de Geração de Tokens (PATs) no GitHub:** [github.com/settings/tokens](https://github.com/settings/tokens)
-- 🔑 **Como criar seu Personal Access Token (PAT):** [Managing your personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-- 🧩 **Documentação oficial da API do GitHub (Estatísticas):** [REST API Endpoints for Repository Statistics](https://docs.github.com/en/rest/metrics/statistics?apiVersion=2022-11-28)
-- 🐍 **Documentação oficial do módulo `requests`:** [Python Requests](https://docs.python-requests.org/en/latest/)
-- 🎨 **Documentação do Tkinter / ttk:** [tkinter — Python interface to Tcl/Tk](https://docs.python.org/3/library/tkinter.html) · [tkinter.ttk — Tk themed widgets](https://docs.python.org/3/library/tkinter.ttk.html)
+<h3>👨‍💻 Desenvolvedor</h3>
 
----
+<p><strong>Arthur Moraes</strong></p>
 
-## 🧾 Licença
+<p>Engenharia de Software | PUC Minas</p>
 
-Este projeto é disponibilizado sob a licença **MIT**.
+<a href="https://github.com/arthurmbaam-stack">
+  <img src="https://img.shields.io/badge/GitHub-arthurmbaam--stack-181717?style=for-the-badge&logo=github" alt="GitHub"/>
+</a>
 
----
+<p>Desenvolvido com Python 🐍</p>
+
+</div>

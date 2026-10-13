@@ -549,7 +549,6 @@ def gerar_pdf_geral(result, caminho, details_by_user=None):
     story.extend([
         Spacer(1, 15),
         Paragraph(
-            "Observação: quantidade de linhas não mede qualidade. "
             "Issues fechadas são contadas pelo autor da Issue, "
             "não necessariamente por quem a resolveu. "
             "A análise de arquivos e commits pode ser amostral "
@@ -582,3 +581,42 @@ def gerar_pdf_geral(result, caminho, details_by_user=None):
         onFirstPage=footer,
         onLaterPages=footer,
     )
+
+
+def gerar_pdf_rapido(result, caminho):
+    """PDF de ranking e gráfico, sem consultas adicionais à API."""
+    from reportlab.platypus import KeepTogether
+    doc = SimpleDocTemplate(caminho, pagesize=(21 * cm, 29.7 * cm),
+                            rightMargin=2 * cm, leftMargin=2 * cm,
+                            topMargin=2 * cm, bottomMargin=2 * cm)
+    styles = getSampleStyleSheet()
+    title = ParagraphStyle('QuickTitle', parent=styles['Heading1'], textColor=BLUE)
+    normal = styles['Normal']
+    story = [Paragraph('GITHUB CONTRIBUTOR STATS', title),
+             Paragraph('Relatório rápido de contribuições', styles['Heading2']),
+             Paragraph(f'Repositório: {escape(result.full_name)}', normal),
+             Spacer(1, 12),
+             Paragraph(f'Colaboradores: {len(result.contributors)} | '
+                       f'Commits: {result.total_commits} | '
+                       f'Adições: {result.total_additions} | '
+                       f'Remoções: {result.total_deletions}', normal),
+             Spacer(1, 12)]
+    rows = [['#', 'Colaborador', 'Commits', 'Adições', 'Remoções', 'Impacto']]
+    for c in result.contributors:
+        rows.append([str(c.rank), Paragraph(escape(c.username), normal),
+                     str(c.commits), str(c.additions), str(c.deletions), str(c.net_impact)])
+    table = Table(rows, repeatRows=1, colWidths=[1*cm, 5.5*cm, 2.2*cm, 2.7*cm, 2.7*cm, 2.9*cm])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), DARK),
+        ('TEXTCOLOR', (0, 0), (-1, 0), WHITE),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [WHITE, colors.HexColor('#EDEFF5')]),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    story.extend([table, Spacer(1, 18),
+                Paragraph('Comparativo de commits (Top 10)', styles['Heading2']),
+                _chart_bars([(c.username[:9], c.commits) for c in
+                            sorted(result.contributors, key=lambda c: c.commits, reverse=True)[:10]]),
+                Spacer(1, 12),])
+    doc.build(story)
