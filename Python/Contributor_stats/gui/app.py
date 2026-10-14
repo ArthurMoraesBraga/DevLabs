@@ -168,7 +168,6 @@ class ContributorStatsApp(tk.Tk):
         self.barra_pdf.stop()
         self.aviso_pdf.destroy()
 
-        self.botao_pdf_geral.configure(state="normal")
 
         if erro:
             messagebox.showerror(

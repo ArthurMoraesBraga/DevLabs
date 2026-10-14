@@ -12,7 +12,7 @@ import os
 #    Exemplo: GITHUB_TOKEN = "ghp_AbCdEf123..."
 #    ⚠️ Não faça commit/push do seu token real para o GitHub!
 # ======================================================================
-GITHUB_TOKEN = "ghp_#######"
+GITHUB_TOKEN = ""
 
 # URL base da API REST do GitHub
 GITHUB_API_BASE = "https://api.github.com"
@@ -22,7 +22,7 @@ GITHUB_API_VERSION = "2022-11-28"
 
 # Repositório usado como exemplo quando nenhuma URL é informada
 DEFAULT_REPO_URL = (
-    "https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0427200-estagi-on"
+    ""
 )
 
 # Polling do endpoint /stats/contributors (a API responde 202 enquanto calcula)
