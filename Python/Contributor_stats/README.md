@@ -587,8 +587,8 @@ reportlab&gt;=4.0
 
 <p>Engenharia de Software | PUC Minas</p>
 
-<a href="https://github.com/arthurmbaam-stack">
-  <img src="https://img.shields.io/badge/GitHub-arthurmbaam--stack-181717?style=for-the-badge&logo=github" alt="GitHub"/>
+<a href="https://github.com/ArthurMoraesBraga">
+  <img src="https://img.shields.io/badge/GitHub-ArthurMoraesBraga-181717?style=for-the-badge&logo=github" alt="GitHub"/>
 </a>
 
 <p>Desenvolvido com Python 🐍</p>
