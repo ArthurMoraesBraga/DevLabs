@@ -9,6 +9,11 @@
 </p>
 
 <p>
+  <img
+  src="https://komarev.com/ghpvc/?username=ArthurMoraesBraga-Contributor-Stats&label=Visitas&color=8fa3ad&style=flat"
+  alt="Contador de visitas ao Contributor Stats"
+  />
+  <br>
   <img src="https://skillicons.dev/icons?i=python,github,git,vscode" alt="Tecnologias utilizadas"/>
 </p>
 
