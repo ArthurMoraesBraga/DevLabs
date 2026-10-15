@@ -23,7 +23,11 @@ A pasta também possui projetos desenvolvidos em <strong>Python</strong>, utiliz
 <h2>Tecnologias utilizadas</h2>
 
 <div align="center">
-
+<img
+  src="https://komarev.com/ghpvc/?username=ArthurMoraesBraga-DevLabs&label=Visitas&color=8fa3ad&style=flat"
+  alt="Contador de visitas ao DevLabs"
+/>
+  <br>
 <img src="https://skillicons.dev/icons?i=java,spring,html,css,python" alt="Java, Spring Boot, HTML, CSS e Python"/>
 
 </div>
