@@ -8,14 +8,21 @@
   visualizar estatísticas de colaboradores e gerar relatórios detalhados.
 </p>
 
-<p>
+<div align="center">
+
   <img
-  src="https://komarev.com/ghpvc/?username=ArthurMoraesBraga-Contributor-Stats&label=Visitas&color=8fa3ad&style=flat"
-  alt="Contador de visitas ao Contributor Stats"
+    src="https://visitor-badge.laobi.icu/badge?page_id=ArthurMoreasBraga.Contributor-Stats"
+    alt="Contador de visitas"
   />
+
   <br>
-  <img src="https://skillicons.dev/icons?i=python,github,git,vscode" alt="Tecnologias utilizadas"/>
-</p>
+
+  <img
+    src="https://skillicons.dev/icons?i=python,github,git,vscode"
+    alt="Tecnologias utilizadas"
+  />
+
+</div>
 
 <p>
   <strong>Python • Tkinter • GitHub REST API • ReportLab</strong>
