@@ -1,10 +1,50 @@
+### Build (Maven) ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+HELP.md
 
-target
-
+### Segredos: credenciais do banco (Supabase) e variáveis de ambiente ###
 src/main/resources/application-local.properties
 src/main/resources/application-*-local.properties
+src/main/resources/application-local.yml
 .env
 *.env
 !.env.example
 
+### Logs ###
+*.log
+logs/
 
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### Eclipse / STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Sistema operacional ###
+.DS_Store
+Thumbs.db
+desktop.ini
