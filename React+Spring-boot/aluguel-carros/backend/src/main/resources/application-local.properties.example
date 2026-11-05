@@ -1,0 +1,9 @@
+# Copie este arquivo para "application-local.properties" (mesma pasta) e preencha.
+# O arquivo application-local.properties está no .gitignore e NÃO vai para o GitHub.
+#
+# Onde achar os valores: painel do Supabase > botão "Connect" > aba "Session pooler".
+# Escreva os valores direto, SEM ${ } e SEM < >.
+
+spring.datasource.url=jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require
+spring.datasource.username=postgres.SEU_PROJECT_ID
+spring.datasource.password=SUA_SENHA_DO_BANCO
