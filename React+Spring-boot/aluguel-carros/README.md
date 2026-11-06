@@ -470,49 +470,49 @@ A aplicação tem **modo claro e modo escuro**, alternáveis pelo botão no cant
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/login_branco.jpg" alt="Tela de Login no modo claro" width="420px"/> | <img src="docs/screenshots/login_preto.jpg" alt="Tela de Login no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/login_branco.png" alt="Tela de Login no modo claro" width="420px"/> | <img src="docs/screenshots/login_preto.png" alt="Tela de Login no modo escuro" width="420px"/> |
 
 #### 👤 Cadastro de cliente
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/cadastro_cliente_branco.jpg" alt="Tela de Cadastro de cliente no modo claro" width="420px"/> | <img src="docs/screenshots/cadastro_cliente_preto.jpg" alt="Tela de Cadastro de cliente no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/cadastro_cliente_branco.png" alt="Tela de Cadastro de cliente no modo claro" width="420px"/> | <img src="docs/screenshots/cadastro_cliente_preto.png" alt="Tela de Cadastro de cliente no modo escuro" width="420px"/> |
 
 #### 🏢 Cadastro de agente (empresa / banco)
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/cadastro_agente_branco.jpg" alt="Tela de Cadastro de agente no modo claro" width="420px"/> | <img src="docs/screenshots/cadastro_agente_preto.jpg" alt="Tela de Cadastro de agente no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/cadastro_agente_branco.png" alt="Tela de Cadastro de agente no modo claro" width="420px"/> | <img src="docs/screenshots/cadastro_agente_preto.png" alt="Tela de Cadastro de agente no modo escuro" width="420px"/> |
 
 #### 🏠 Início do cliente (resumo por status e frota em destaque)
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/inicio_cliente_branco.jpg" alt="Tela inicial do cliente no modo claro" width="420px"/> | <img src="docs/screenshots/inicio_cliente_preto.jpg" alt="Tela inicial do cliente no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/inicio_cliente_branco.png" alt="Tela inicial do cliente no modo claro" width="420px"/> | <img src="docs/screenshots/inicio_cliente_preto.png" alt="Tela inicial do cliente no modo escuro" width="420px"/> |
 
 #### 📋 Pedidos (abas Ativos / Cancelados / Todos)
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/pedidos_branco.jpg" alt="Lista de pedidos no modo claro" width="420px"/> | <img src="docs/screenshots/pedidos_preto.jpg" alt="Lista de pedidos no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/pedidos_branco.png" alt="Lista de pedidos no modo claro" width="420px"/> | <img src="docs/screenshots/pedidos_preto.png" alt="Lista de pedidos no modo escuro" width="420px"/> |
 
 #### ➕ Novo pedido de aluguel
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/novo_pedido_branco.jpg" alt="Tela de novo pedido no modo claro" width="420px"/> | <img src="docs/screenshots/novo_pedido_preto.jpg" alt="Tela de novo pedido no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/novo_pedido_branco.png" alt="Tela de novo pedido no modo claro" width="420px"/> | <img src="docs/screenshots/novo_pedido_preto.png" alt="Tela de novo pedido no modo escuro" width="420px"/> |
 
 #### 🚘 Automóveis (frota com imagem por link)
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/automoveis_branco.jpg" alt="Tela de automóveis no modo claro" width="420px"/> | <img src="docs/screenshots/automoveis_preto.jpg" alt="Tela de automóveis no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/automoveis_branco.png" alt="Tela de automóveis no modo claro" width="420px"/> | <img src="docs/screenshots/automoveis_preto.png" alt="Tela de automóveis no modo escuro" width="420px"/> |
 
 #### 🧑 Meu perfil (edição de cliente e rendimentos)
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/meu_perfil_branco.jpg" alt="Tela meu perfil no modo claro" width="420px"/> | <img src="docs/screenshots/meu_perfil_preto.jpg" alt="Tela meu perfil no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/meu_perfil_branco.png" alt="Tela meu perfil no modo claro" width="420px"/> | <img src="docs/screenshots/meu_perfil_preto.png" alt="Tela meu perfil no modo escuro" width="420px"/> |
 
 #### 🏢 Início do agente (empresa)
 
@@ -520,7 +520,7 @@ Visão do agente: acesso a **Clientes** e sem a opção de criar pedido (exclusi
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/inicio_empresa_branco.jpg" alt="Tela inicial da empresa no modo claro" width="420px"/> | <img src="docs/screenshots/inicio_empresa_preto.jpg" alt="Tela inicial da empresa no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/inicio_empresa_branco.png" alt="Tela inicial da empresa no modo claro" width="420px"/> | <img src="docs/screenshots/inicio_empresa_preto.png" alt="Tela inicial da empresa no modo escuro" width="420px"/> |
 
 #### 📑 Pedidos (visão do agente)
 
@@ -528,7 +528,7 @@ O agente vê os pedidos de **todos os clientes** (com a coluna "Cliente") e pode
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/pedidos_agente_branco.jpg" alt="Pedidos na visão do agente no modo claro" width="420px"/> | <img src="docs/screenshots/pedidos_agente_preto.jpg" alt="Pedidos na visão do agente no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/pedidos_agente_branco.png" alt="Pedidos na visão do agente no modo claro" width="420px"/> | <img src="docs/screenshots/pedidos_agente_preto.png" alt="Pedidos na visão do agente no modo escuro" width="420px"/> |
 
 #### 🚗 Automóveis (visão do agente: cadastro, edição e imagem por link)
 
@@ -536,7 +536,7 @@ O agente cadastra, edita e exclui veículos. O campo **"Link da imagem"** mostra
 
 | ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| <img src="docs/screenshots/automoveis_empresa_branco.jpg" alt="Automóveis na visão do agente no modo claro" width="420px"/> | <img src="docs/screenshots/automoveis_empresa_preto.jpg" alt="Automóveis na visão do agente no modo escuro" width="420px"/> |
+| <img src="docs/screenshots/automoveis_empresa_branco.png" alt="Automóveis na visão do agente no modo claro" width="420px"/> | <img src="docs/screenshots/automoveis_empresa_preto.png" alt="Automóveis na visão do agente no modo escuro" width="420px"/> |
 
 ### 💻 Exemplo de Saída no Terminal (API)
 
