@@ -1,9 +1,32 @@
+<div align="center">
+
+<h1>🚗 DriveFlow — Plataforma de Aluguel de Carros 🔑</h1>
+
+<p>
+  Plataforma web para efetuar, modificar, consultar e cancelar pedidos de aluguel
+  de automóveis pela Internet, com análise financeira feita por agentes
+  (empresas e bancos) e execução de contratos, com ou sem crédito bancário.
+</p>
+
+<div align="center">
+  <img
+    src="https://visitor-badge.laobi.icu/badge?page_id=ArthurMoraesBraga.DriveFlow"
+    alt="Contador de visitas"
+  />
+  <br>
+  <img
+    src="https://skillicons.dev/icons?i=react,vite,java,spring,maven,supabase,postgres,git,github"
+    alt="Tecnologias utilizadas"
+  />
+</div>
+
+<p>
+  <strong>React • Vite • Java • Spring Boot • Spring Data JPA • Supabase (PostgreSQL)</strong>
+</p>
+
+</div>
+
 ---
-
-# 🚗 DriveFlow — Plataforma de Aluguel de Carros 🔑
-
-> [!NOTE]
-> Plataforma web para **efetuar, modificar, consultar e cancelar pedidos de aluguel de automóveis pela Internet**, com análise financeira feita por agentes (empresas e bancos) e execução de contratos, com ou sem crédito bancário.
 
 <table>
   <tr>
@@ -534,13 +557,12 @@ mvn test
 
 ## 👥 Autores
 
-| 👤 Nome | 🖼️ Foto | :octocat: GitHub | 💼 LinkedIn | 📤 Gmail |
-|---------|----------|-----------------|-------------|-----------|
-| Nome 1  | <div align="center"><img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" width="70px" height="70px"></div> | <div align="center"><a href="https://github.com/user1"><img src="https://joaopauloaramuni.github.io/image/github6.png" width="50px" height="50px"></a></div> | <div align="center"><a href="https://www.linkedin.com/in/user1"><img src="https://joaopauloaramuni.github.io/image/linkedin2.png" width="50px" height="50px"></a></div> | <div align="center"><a href="mailto:user1@gmail.com"><img src="https://joaopauloaramuni.github.io/image/gmail3.png" width="50px" height="50px"></a></div> |
-| Nome 2  | <div align="center"><img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" width="70px" height="70px"></div> | <div align="center"><a href="https://github.com/user2"><img src="https://joaopauloaramuni.github.io/image/github6.png" width="50px" height="50px"></a></div> | <div align="center"><a href="https://www.linkedin.com/in/user2"><img src="https://joaopauloaramuni.github.io/image/linkedin2.png" width="50px" height="50px"></a></div> | <div align="center"><a href="mailto:user2@gmail.com"><img src="https://joaopauloaramuni.github.io/image/gmail3.png" width="50px" height="50px"></a></div> |
+| 👤 Nome | :octocat: GitHub |
+| :--- | :---: |
+| **Arthur Moraes** | <a href="https://github.com/ArthurMoraesBraga"><img src="https://img.shields.io/badge/GitHub-ArthurMoraesBraga-181717?style=for-the-badge&logo=github" alt="GitHub de Arthur Moraes"/></a> |
 
 > [!TIP]
-> 💡 Troque os nomes, fotos e links pelos dados dos integrantes do grupo.
+> 💡 Adicione aqui os demais integrantes do grupo, se houver.
 
 ---
 
@@ -572,3 +594,21 @@ Este projeto é distribuído sob a **[Licença MIT](./LICENSE)**.
 O front-end usa um CSS global em `frontend/src/index.css` com tokens de cor, tipografia (DM Sans + Manrope), raios e sombras. O **modo escuro** é implementado remapeando esses tokens em `:root[data-theme="dark"]`, então todos os componentes se adaptam automaticamente; o tema é controlado por `context/ThemeContext.jsx` e alternado pelo botão `components/ThemeToggle.jsx`.
 
 As imagens dos automóveis podem vir de um **link informado pelo agente** (campo "Link da imagem" no cadastro/edição). Quando não há link — ou o link falha ao carregar — o sistema exibe uma ilustração SVG gerada em código (`components/CarArt.jsx`), cuja cor e carroceria variam conforme a placa, sem depender de arquivos externos.
+
+---
+
+<div align="center">
+
+<h3>👨‍💻 Desenvolvedor</h3>
+
+<p><strong>Arthur Moraes</strong></p>
+
+<p>Engenharia de Software | PUC Minas</p>
+
+<a href="https://github.com/ArthurMoraesBraga">
+  <img src="https://img.shields.io/badge/GitHub-ArthurMoraesBraga-181717?style=for-the-badge&logo=github" alt="GitHub"/>
+</a>
+
+<p>Desenvolvido com React ⚛️ e Spring Boot 🍃</p>
+
+</div>
