@@ -13,3 +13,6 @@ frontend/.env
 .vscode/
 *.iml
 .DS_Store
+
+# Ferramenta de renderização dos diagramas (não versionar o jar)
+docs/diagramas/plantuml.jar
