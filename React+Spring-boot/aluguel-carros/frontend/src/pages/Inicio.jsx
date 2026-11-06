@@ -35,8 +35,7 @@ export default function Inicio() {
           </div>
         </div>
         {pedidos.length === 0 ? (
-          <Link to={isCliente ? '/pedidos/novo' : '/automoveis'} className="hero-cta" aria-label="Alugue seu carro">
-            <FotoCarro url={frota[0]?.imagemUrl} seed={frota[0]?.placa ?? 'hero-inicio'} titulo="Alugue seu carro" className="hero-carro" />
+          <Link to={isCliente ? '/pedidos/novo' : '/automoveis'} className="hero-cta hero-cta-vazio" aria-label="Alugue seu carro">
             <span className="hero-cta-texto">
               <strong>Alugue seu carro</strong>
               <small>{isCliente ? 'Faça seu primeiro pedido agora' : 'Veja a frota disponível'}</small>

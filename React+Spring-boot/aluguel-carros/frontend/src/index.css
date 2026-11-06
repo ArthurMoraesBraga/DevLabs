@@ -756,7 +756,7 @@ tbody tr:last-child td { border-bottom: none; }
 	.hero.inicio { grid-template-columns: 1fr; }
 	.auth { grid-template-columns: 1fr; }
 	.auth-visual { position: static; height: auto; padding: 28px 24px; }
-	.auth-visual .car-art, .vantagens { display: none; }
+	.auth-visual .car-art, .auth-logo, .vantagens { display: none; }
 }
 @media (max-width: 700px) {
 	.cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -911,3 +911,41 @@ html { color-scheme: light; transition: background-color 0.25s ease; }
 	background: var(--color-secondary); border-radius: 50px;
 }
 .hero-cta-texto small { color: #E6EBF0; font-weight: 600; font-size: 0.95rem; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); }
+
+/* CTA "Alugue seu carro" sem imagem: bloco com fundo/realce proprio */
+.hero-cta-vazio {
+	min-height: 220px;
+	display: grid; place-items: center;
+	border: 1px solid var(--color-primary-light);
+	background:
+		radial-gradient(520px 220px at 70% 20%, rgba(217, 243, 106, 0.18), transparent 65%),
+		var(--color-primary-light);
+}
+.hero-cta-vazio .hero-cta-texto { position: static; inset: auto; }
+
+/* Abas da pagina de Pedidos (Ativos / Cancelados / Todos) */
+.abas-pedidos { grid-template-columns: repeat(3, 1fr); max-width: 520px; }
+
+/* Logo em destaque no painel de login/cadastro (no lugar da ilustracao do carro) */
+.auth-logo {
+	margin: 28px 0 8px;
+	display: flex; flex-direction: column; align-items: center; gap: 18px;
+	padding: 40px 24px;
+	border-radius: var(--radius-lg);
+	background:
+		radial-gradient(420px 260px at 50% 30%, rgba(217, 243, 106, 0.16), transparent 70%),
+		rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.auth-logo-mark { width: 128px; height: 128px; filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.4)); }
+.auth-logo-nome {
+	font-family: var(--font-heading); font-weight: 800; font-size: 2rem; letter-spacing: -0.02em; color: #fff;
+}
+.auth-logo-nome span { color: var(--color-secondary); }
+
+/* O painel visual (.auth-visual) ja tem fundo escuro nos dois temas, entao a
+   logo fica legivel tanto no modo claro quanto no escuro. No tema escuro,
+   reforcamos levemente o contraste do cartao da logo. */
+:root[data-theme='dark'] .auth-logo { background:
+	radial-gradient(420px 260px at 50% 30%, rgba(217, 243, 106, 0.12), transparent 70%),
+	rgba(255, 255, 255, 0.03); }

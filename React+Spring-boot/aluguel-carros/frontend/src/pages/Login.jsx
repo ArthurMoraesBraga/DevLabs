@@ -36,7 +36,6 @@ export default function Login() {
         <button className="btn btn-primary">Entrar</button>
       </form>
       <p className="auth-rodape">Não tem conta? <Link to="/cadastro">Cadastre-se</Link></p>
-      <p className="demo">Demo: <code>cliente</code>, <code>empresa</code> ou <code>banco</code> / senha <code>123456</code></p>
     </AuthShell>
   )
 }

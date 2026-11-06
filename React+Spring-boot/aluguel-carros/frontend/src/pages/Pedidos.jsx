@@ -10,7 +10,7 @@ import { formatarData } from '../utils/formatar.js'
 export default function Pedidos() {
   const { isCliente, isAgente } = useAuth()
   const [pedidos, setPedidos] = useState([])
-  const [filtro, setFiltro] = useState('')
+  const [aba, setAba] = useState('ATIVOS')
   const [erro, setErro] = useState(null)
 
   const carregar = () => api.listarPedidos().then(setPedidos).catch(setErro)
@@ -20,13 +20,21 @@ export default function Pedidos() {
     if (!confirm('Cancelar este pedido?')) return
     try {
       await api.cancelarPedido(id)
+      // Ao cancelar, o pedido sai da aba "Ativos" e passa para "Cancelados".
+      setAba('CANCELADOS')
       carregar()
     } catch (err) {
       setErro(err)
     }
   }
 
-  const visiveis = filtro ? pedidos.filter((p) => p.status === filtro) : pedidos
+  const ehCancelado = (p) => p.status === 'CANCELADO'
+  const cancelados = pedidos.filter(ehCancelado)
+  const ativos = pedidos.filter((p) => !ehCancelado(p))
+
+  const visiveis = aba === 'CANCELADOS' ? cancelados
+    : aba === 'TODOS' ? pedidos
+    : ativos
 
   return (
     <section>
@@ -36,19 +44,24 @@ export default function Pedidos() {
       </div>
       <Mensagem erro={erro} />
 
-      <div className="barra-filtros">
-        <label className="filtro">Filtrar por status
-          <select value={filtro} onChange={(e) => setFiltro(e.target.value)}>
-            <option value="">Todos</option>
-            {['PENDENTE', 'APROVADO', 'REPROVADO', 'CONTRATADO', 'CANCELADO'].map((s) => <option key={s}>{s}</option>)}
-          </select>
-        </label>
+      <div className="abas abas-pedidos">
+        <button type="button" className={aba === 'ATIVOS' ? 'ativa' : ''} onClick={() => setAba('ATIVOS')}>
+          Ativos{ativos.length ? ` (${ativos.length})` : ''}
+        </button>
+        <button type="button" className={aba === 'CANCELADOS' ? 'ativa' : ''} onClick={() => setAba('CANCELADOS')}>
+          Cancelados{cancelados.length ? ` (${cancelados.length})` : ''}
+        </button>
+        <button type="button" className={aba === 'TODOS' ? 'ativa' : ''} onClick={() => setAba('TODOS')}>
+          Todos{pedidos.length ? ` (${pedidos.length})` : ''}
+        </button>
       </div>
 
       {visiveis.length === 0 ? (
         <div className="vazio">
-          <h3>Nenhum pedido encontrado</h3>
-          <p>{isCliente ? 'Faça seu primeiro pedido de aluguel.' : 'Quando houver pedidos, eles aparecem aqui.'}</p>
+          <h3>Nenhum pedido {aba === 'CANCELADOS' ? 'cancelado' : aba === 'ATIVOS' ? 'ativo' : 'encontrado'}</h3>
+          <p>{aba === 'CANCELADOS'
+            ? 'Pedidos cancelados aparecem aqui.'
+            : isCliente ? 'Faça seu primeiro pedido de aluguel.' : 'Quando houver pedidos, eles aparecem aqui.'}</p>
         </div>
       ) : (
         <div className="table-container">
