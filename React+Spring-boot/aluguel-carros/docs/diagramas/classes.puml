@@ -45,6 +45,7 @@ class Automovel {
   -marca: String
   -modelo: String
   -placa: String
+  -imagemUrl: String
   -tipoProprietario: TipoProprietario
   -proprietarioId: Long
 }

@@ -21,7 +21,7 @@ package "Subsistema: Gestão de pedidos e contratos\n(backend - Spring Boot, MVC
   package "exception" as be_exception
 }
 
-database "Persistência\n(hoje: memória / futuro: Supabase PostgreSQL)" as DB
+database "Persistência\n(Supabase - PostgreSQL via Spring Data JPA)" as DB
 
 fe_pages ..> fe_components
 fe_pages ..> fe_context
