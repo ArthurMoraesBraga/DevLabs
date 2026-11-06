@@ -2,6 +2,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import Marca from './Marca.jsx'
 import Avatar from './Avatar.jsx'
+import ThemeToggle from './ThemeToggle.jsx'
 
 export default function Layout() {
   const { usuario, logout, isAgente, isCliente } = useAuth()
@@ -25,6 +26,7 @@ export default function Layout() {
           {isCliente && <NavLink to={`/clientes/${usuario.id}/editar`}>Meu perfil</NavLink>}
         </nav>
         <div className="usuario">
+          <ThemeToggle />
           <Avatar nome={usuario.nome} />
           <div className="usuario-info">
             <strong>{usuario.nome}</strong>
@@ -40,7 +42,7 @@ export default function Layout() {
 
       <footer className="footer">
         <Marca />
-        <p>Sistema de Aluguel de Carros · PUC Minas · DIAW</p>
+        <p>DriveFlow · Plataforma de Aluguel de Carros · PUC Minas · DIAW</p>
       </footer>
     </>
   )

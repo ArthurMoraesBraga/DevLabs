@@ -1,10 +1,12 @@
 import Marca from './Marca.jsx'
 import CarArt from './CarArt.jsx'
+import ThemeToggle from './ThemeToggle.jsx'
 
 /** Moldura das telas de login e cadastro: painel visual + formulário. */
 export default function AuthShell({ titulo, subtitulo, largo = false, children }) {
   return (
     <div className="auth">
+      <ThemeToggle className="tema-toggle-flutuante" />
       <aside className="auth-visual">
         <Marca />
         <div>
