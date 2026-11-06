@@ -3,18 +3,18 @@
 # 🚗 DriveFlow — Plataforma de Aluguel de Carros 🔑
 
 > [!NOTE]
-> Sistema web para **efetuar, modificar, consultar e cancelar pedidos de aluguel de automóveis pela Internet**, com análise financeira feita por agentes (empresas e bancos) e execução de contratos, com ou sem crédito bancário.
+> Plataforma web para **efetuar, modificar, consultar e cancelar pedidos de aluguel de automóveis pela Internet**, com análise financeira feita por agentes (empresas e bancos) e execução de contratos, com ou sem crédito bancário.
 
 <table>
   <tr>
     <td width="800px">
       <div align="justify">
-        Este projeto foi desenvolvido no <b>Laboratório 02</b> da disciplina <b>Desenvolvimento e Integração de Aplicações Web (DIAW)</b> do curso de <b>Engenharia de Software da PUC Minas</b>, sob orientação do <a href="https://github.com/joaopauloaramuni">Prof. Dr. João Paulo Aramuni</a>. O sistema apoia a gestão de aluguéis de automóveis: <i>clientes</i> cadastrados criam e acompanham pedidos de aluguel, e <i>agentes</i> (empresas e bancos) analisam esses pedidos do ponto de vista financeiro. Com parecer positivo, o agente <b>executa o contrato</b>, define a quem o automóvel fica registrado e, se necessário, associa um <b>contrato de crédito</b> concedido por um banco. O back-end segue a arquitetura <b>MVC</b> com <b>Spring Boot</b>, e o front-end usa <b>React + Vite</b>.
+        O <b>DriveFlow</b> foi desenvolvido no <b>Laboratório 02</b> da disciplina <b>Desenvolvimento e Integração de Aplicações Web (DIAW)</b> do curso de <b>Engenharia de Software da PUC Minas</b>, sob orientação do <a href="https://github.com/joaopauloaramuni">Prof. Dr. João Paulo Aramuni</a>. O sistema apoia a gestão de aluguéis de automóveis: <i>clientes</i> cadastrados criam e acompanham pedidos de aluguel, e <i>agentes</i> (empresas e bancos) analisam esses pedidos do ponto de vista financeiro. Com parecer positivo, o agente <b>executa o contrato</b>, define a quem o automóvel fica registrado e, se necessário, associa um <b>contrato de crédito</b> concedido por um banco. O back-end segue a arquitetura <b>MVC</b> com <b>Spring Boot</b> e persistência no <b>Supabase (PostgreSQL)</b> via <b>Spring Data JPA</b>, e o front-end usa <b>React + Vite</b> com <b>modo claro/escuro</b>.
       </div>
     </td>
     <td>
       <div>
-        <img src="docs/assets/logo.svg" alt="Logo do Sistema de Aluguel de Carros" width="120px"/>
+        <img src="docs/assets/logo.svg" alt="Logo do DriveFlow" width="120px"/>
       </div>
     </td>
   </tr>
@@ -24,7 +24,7 @@
 
 ## 🚧 Status do Projeto
 
-[![Versão](https://img.shields.io/badge/Versão-v0.1.0-blue?style=for-the-badge)](#) ![Status](https://img.shields.io/badge/Status-Protótipo-orange?style=for-the-badge) ![Java](https://img.shields.io/badge/Java-25-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.x-007ec6?style=for-the-badge&logo=springboot&logoColor=white) ![Maven](https://img.shields.io/badge/Maven-3.9-007ec6?style=for-the-badge&logo=apachemaven&logoColor=white) ![React](https://img.shields.io/badge/React-19-007ec6?style=for-the-badge&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-7-007ec6?style=for-the-badge&logo=vite&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) ![Licença](https://img.shields.io/badge/Licença-MIT-007ec6?style=for-the-badge&logo=opensourceinitiative)
+[![Versão](https://img.shields.io/badge/Versão-v1.0.0-blue?style=for-the-badge)](#) ![Status](https://img.shields.io/badge/Status-Funcional-269B65?style=for-the-badge) ![Java](https://img.shields.io/badge/Java-25-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.x-007ec6?style=for-the-badge&logo=springboot&logoColor=white) ![Maven](https://img.shields.io/badge/Maven-3.9-007ec6?style=for-the-badge&logo=apachemaven&logoColor=white) ![React](https://img.shields.io/badge/React-19-007ec6?style=for-the-badge&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-7-007ec6?style=for-the-badge&logo=vite&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) ![Licença](https://img.shields.io/badge/Licença-MIT-007ec6?style=for-the-badge&logo=opensourceinitiative)
 
 | Etapa do laboratório | Situação |
 | :--- | :---: |
@@ -49,9 +49,15 @@
 - [Instalação e Execução](#-instalação-e-execução)
   - [Pré-requisitos](#pré-requisitos)
   - [Variáveis de Ambiente](#-variáveis-de-ambiente)
+    - [1 Back-end (Spring Boot)](#1-back-end-spring-boot)
+    - [2 Front-end (React, Vite)](#2-front-end-react-vite)
   - [Instalação de Dependências](#-instalação-de-dependências)
+    - [Front-end (React)](#front-end-react)
+    - [Back-end (Spring Boot)](#back-end-spring-boot)
   - [Inicialização do Banco de Dados (PostgreSQL)](#-inicialização-do-banco-de-dados-postgresql)
   - [Como Executar a Aplicação](#-como-executar-a-aplicação)
+    - [Terminal 1: Back-end (Spring Boot)](#terminal-1-back-end-spring-boot)
+    - [Terminal 2: Front-end (React, Vite)](#terminal-2-front-end-react-vite)
 - [Deploy](#-deploy)
 - [Estrutura de Pastas](#-estrutura-de-pastas)
 - [Demonstração](#-demonstração)
@@ -79,7 +85,7 @@
 
 **Por que existe:** locadoras e instituições financeiras precisam de um canal único em que clientes solicitem aluguéis e agentes analisem esses pedidos antes de fechar o contrato.
 
-**Problema que resolve:** sem um sistema, pedidos, análises de crédito e contratos ficam espalhados entre e-mail, telefone e planilhas. O sistema centraliza o ciclo completo, do pedido ao contrato, e deixa o status visível para o cliente o tempo todo.
+**Problema que resolve:** sem um sistema, pedidos, análises de crédito e contratos ficam espalhados entre e-mail, telefone e planilhas. O DriveFlow centraliza o ciclo completo, do pedido ao contrato, e deixa o status visível para o cliente o tempo todo.
 
 **Contexto:** projeto acadêmico do LAB02 (DIAW – PUC Minas), seguindo a especificação do professor. O sistema é dividido em dois subsistemas:
 1. **Gestão de pedidos e contratos** → back-end Spring Boot.
@@ -90,7 +96,7 @@
 - **Clientes** introduzem, modificam, consultam e cancelam pedidos.
 - **Agentes** (empresas e bancos) modificam e avaliam pedidos.
 - Do contratante armazenam-se **RG, CPF, nome, endereço, profissão** e até **3 rendimentos** (entidade empregadora + valor).
-- Do automóvel registram-se **matrícula, ano, marca, modelo e placa**.
+- Do automóvel registram-se **matrícula, ano, marca, modelo e placa** (e um link de imagem opcional).
 - Conforme o contrato, o automóvel fica registrado como propriedade do **cliente, da empresa ou do banco**.
 - O aluguel pode ter um **contrato de crédito** concedido por um banco agente.
 
@@ -109,7 +115,7 @@ PENDENTE ──avaliar (aprovado)──▶ APROVADO ──executar contrato─�
 
 - 🔐 **Autenticação:** cadastro de clientes e agentes, login com usuário e senha (hash BCrypt), logout e rotas protegidas no back-end e no front-end.
 - 👤 **CRUD de Cliente:** criar, listar, consultar, editar e excluir, com até 3 rendimentos, validação de CPF e unicidade de login/CPF.
-- 📝 **Pedidos de Aluguel (cliente):** introduzir, consultar, modificar (enquanto PENDENTE) e cancelar (PENDENTE ou APROVADO).
+- 📝 **Pedidos de Aluguel (cliente):** introduzir, consultar, modificar (enquanto PENDENTE) e cancelar (PENDENTE ou APROVADO). Ao cancelar, o pedido sai da aba **Ativos** e vai para a aba **Cancelados**.
 - 🏦 **Análise financeira (agente):** visualizar a renda do cliente e aprovar ou reprovar o pedido com parecer.
 - 📄 **Execução de contrato (agente):** definir o proprietário do automóvel (cliente, empresa ou banco) e associar um contrato de crédito (banco, valor, juros, prazo).
 - 🚘 **Automóveis:** consulta da frota por todos; cadastro, **edição** e exclusão por agentes, com placa e matrícula únicas. Cada veículo aceita um **link de imagem**: ao colar a URL da foto, a imagem aparece em pré-visualização e nos cards (sem link, o sistema gera uma ilustração SVG).
@@ -132,6 +138,8 @@ PENDENTE ──avaliar (aprovado)──▶ APROVADO ──executar contrato─�
 ---
 
 ## 🛠 Tecnologias Utilizadas
+
+As ferramentas, frameworks e bibliotecas abaixo foram utilizados na construção do projeto. Recomenda-se o uso das versões listadas (ou superiores) para garantir a compatibilidade.
 
 ### 💻 Front-end
 
@@ -160,7 +168,7 @@ PENDENTE ──avaliar (aprovado)──▶ APROVADO ──executar contrato─�
 
 ## 🏗 Arquitetura
 
-O sistema é um **monólito em duas aplicações** (back-end e front-end) que se comunicam por **HTTP/JSON (REST)**.
+O DriveFlow é um **monólito em duas aplicações** (back-end e front-end) que se comunicam por **HTTP/JSON (REST)**.
 
 **Back-end — MVC em camadas**
 
@@ -181,8 +189,8 @@ O sistema é um **monólito em duas aplicações** (back-end e front-end) que se
 **Fluxo de uma requisição:**
 ```
 React (pages) → services/api.js → [HTTP + Bearer token]
-  → TokenAuthenticationFilter → Controller → Service → Model / Repository
-  → DTO de resposta → JSON → React atualiza a tela
+  → TokenAuthenticationFilter → Controller → Service → Model / Repository (JPA)
+  → Supabase (PostgreSQL) → DTO de resposta → JSON → React atualiza a tela
 ```
 
 **Decisões e trade-offs:**
@@ -214,14 +222,17 @@ Os diagramas estão em PlantUML na pasta [`docs/diagramas`](docs/diagramas). Par
 * **Apache Maven:** versão **3.9** ou superior
 * **Node.js:** versão LTS (**v20** ou superior), para o front-end React
 * **Gerenciador de Pacotes:** npm
+* **Conta no Supabase:** um projeto PostgreSQL para a conexão do back-end
 
 ---
 
 ### 🔑 Variáveis de Ambiente
 
+Configure as variáveis de ambiente (ou arquivos de configuração) de cada parte da aplicação.
+
 #### 1 Back-end (Spring Boot)
 
-Configuradas em `backend/src/main/resources/application.properties`:
+As credenciais do banco **não ficam** em `application.properties` (versionado). Elas vêm das variáveis de ambiente abaixo ou de `application-local.properties` (ignorado pelo Git — veja [Inicialização do Banco de Dados](#-inicialização-do-banco-de-dados-postgresql)).
 
 | Variável | Descrição | Exemplo |
 | :--- | :--- | :--- |
@@ -233,7 +244,7 @@ Configuradas em `backend/src/main/resources/application.properties`:
 
 #### 2 Front-end (React, Vite)
 
-Crie o arquivo `frontend/.env` a partir de `frontend/.env.example` (opcional, pois o valor padrão já aponta para o back-end local):
+Crie o arquivo `frontend/.env` a partir de `frontend/.env.example` (opcional, pois o valor padrão já aponta para o back-end local). Em projetos **Vite**, as variáveis precisam do prefixo `VITE_` para ficarem disponíveis no código do cliente.
 
 | Variável | Descrição | Exemplo |
 | :--- | :--- | :--- |
@@ -250,7 +261,7 @@ git clone <URL_DO_REPOSITÓRIO>
 cd aluguel-carros
 ```
 
-2. **Front-end (React):**
+#### Front-end (React)
 
 ```bash
 cd frontend
@@ -258,7 +269,7 @@ npm install
 cd ..
 ```
 
-3. **Back-end (Spring Boot):**
+#### Back-end (Spring Boot)
 
 ```bash
 cd backend
@@ -290,6 +301,8 @@ copy application-local.properties.example application-local.properties   # Windo
 ---
 
 ### ⚡ Como Executar a Aplicação
+
+Execute a aplicação em modo de desenvolvimento em **dois terminais separados**.
 
 #### Terminal 1: Back-end (Spring Boot)
 
@@ -337,7 +350,9 @@ cd ../backend
 mvn clean package
 ```
 
-2. **Execução em produção:**
+2. **Configuração do ambiente de produção:** defina as variáveis de ambiente no seu provedor (Vercel, Railway, Render etc.). Configure as de **conexão com o banco** (`SUPABASE_DB_URL`, `SUPABASE_DB_USER`, `SUPABASE_DB_PASSWORD`) para o back-end e a **URL da API** (`VITE_API_URL`) para o front-end.
+
+3. **Execução em produção:**
 
 ```bash
 java -jar backend/target/aluguel-carros-0.0.1-SNAPSHOT.jar
@@ -354,7 +369,6 @@ npx serve -s frontend/dist
 aluguel-carros/
 ├── .gitignore                   # 🧹 Ignora target, node_modules, .env etc.
 ├── LICENSE                      # ⚖️ Licença MIT.
-├── PROMPT.md                    # 🤖 Prompts usados no desenvolvimento.
 ├── README.md                    # 📘 Documentação principal.
 │
 ├── backend/                     # 📁 Aplicação Spring Boot (MVC)
@@ -366,12 +380,13 @@ aluguel-carros/
 │       │   ├── controller/      # 🎮 Endpoints REST (Auth, Cliente, Agente, Automovel, Pedido).
 │       │   ├── dto/             # ✉️ Requests e responses da API.
 │       │   ├── exception/       # 💥 Exceções de negócio e GlobalExceptionHandler.
-│       │   ├── model/           # 🧬 Entidades de domínio e regras de negócio.
+│       │   ├── model/           # 🧬 Entidades JPA e regras de negócio.
 │       │   ├── repository/      # 🗄️ Repositórios Spring Data JPA (JpaRepository) sobre o PostgreSQL.
 │       │   ├── security/        # 🛡️ TokenService e filtro de autenticação.
 │       │   └── service/         # ⚙️ Casos de uso e regras de negócio.
 │       └── resources/
-│           └── application.properties  # ⚙️ Configuração da aplicação.
+│           ├── application.properties             # ⚙️ Configuração (sem segredos; usa env vars).
+│           └── application-local.properties.example  # 🧩 Modelo das credenciais locais do Supabase.
 │
 ├── frontend/                    # 📁 Aplicação React + Vite
 │   ├── .env.example             # 🧩 Variáveis de ambiente do front-end.
@@ -379,14 +394,14 @@ aluguel-carros/
 │   ├── package.json             # 📦 Dependências e scripts.
 │   ├── vite.config.js
 │   └── src/
-│       ├── components/          # 🧱 Layout, RotaProtegida, ClienteForm, StatusBadge, Mensagem.
-│       ├── context/             # 🔐 AuthContext (sessão do usuário).
+│       ├── components/          # 🧱 Layout, RotaProtegida, FotoCarro, ThemeToggle, StatusBadge, Mensagem.
+│       ├── context/             # 🔐 AuthContext (sessão) e ThemeContext (tema claro/escuro).
 │       ├── pages/               # 📄 Login, Cadastro, Início, Pedidos, Clientes, Automóveis...
 │       ├── services/            # 🔌 api.js (chamadas HTTP).
 │       ├── utils/               # 🛠️ Formatação de datas e moeda.
 │       ├── App.jsx              # 🧭 Rotas.
 │       ├── main.jsx             # ▶️ Ponto de entrada.
-│       └── index.css            # 🎨 Estilos globais.
+│       └── index.css            # 🎨 Estilos globais (tokens + modo escuro).
 │
 └── docs/                        # 📚 Documentação
     ├── assets/logo.svg          # 🖼️ Logo do projeto.
@@ -398,10 +413,12 @@ aluguel-carros/
 
 ## 🎥 Demonstração
 
-### 🌐 Aplicação Web
-
 > [!WARNING]
 > Substitua as imagens abaixo por capturas reais do sistema (salve em `docs/assets/` ou no GitHub Pages).
+
+### 🌐 Aplicação Web
+
+Para melhor visualização, as telas principais estão organizadas lado a lado.
 
 | Tela | Captura de Tela |
 | :---: | :---: |
@@ -409,8 +426,8 @@ aluguel-carros/
 | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela de Login" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela de Cadastro" width="120px" height="120px"> |
 | **Início (resumo por status)** | **Lista de Pedidos** |
 | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela Inicial" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Lista de Pedidos" width="120px" height="120px"> |
-| **Detalhe do Pedido (avaliação e contrato)** | **Clientes (CRUD)** |
-| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Detalhe do Pedido" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Clientes" width="120px" height="120px"> |
+| **Detalhe do Pedido (avaliação e contrato)** | **Automóveis (CRUD + imagem)** |
+| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Detalhe do Pedido" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Automóveis" width="120px" height="120px"> |
 
 ### 💻 Exemplo de Saída no Terminal (API)
 
