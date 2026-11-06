@@ -11,6 +11,7 @@ import br.pucminas.aluguelcarros.model.PedidoAluguel;
 import br.pucminas.aluguelcarros.model.Usuario;
 import br.pucminas.aluguelcarros.repository.ContratoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Execução do contrato de um pedido aprovado.
@@ -35,6 +36,7 @@ public class ContratoService {
         this.automovelService = automovelService;
     }
 
+    @Transactional
     public PedidoAluguel executar(Long pedidoId, ContratoRequest req, Usuario agente) {
         PedidoAluguel pedido = pedidoService.buscarPorId(pedidoId);
 

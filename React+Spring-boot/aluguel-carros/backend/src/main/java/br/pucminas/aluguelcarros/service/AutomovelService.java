@@ -9,6 +9,7 @@ import br.pucminas.aluguelcarros.repository.AutomovelRepository;
 import br.pucminas.aluguelcarros.repository.PedidoAluguelRepository;
 import br.pucminas.aluguelcarros.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +37,7 @@ public class AutomovelService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Automóvel " + id + " não encontrado."));
     }
 
+    @Transactional
     public Automovel criar(AutomovelRequest req) {
         validar(req, null);
         Automovel a = new Automovel();
@@ -43,6 +45,7 @@ public class AutomovelService {
         return automovelRepository.save(a);
     }
 
+    @Transactional
     public Automovel atualizar(Long id, AutomovelRequest req) {
         Automovel a = buscar(id);
         validar(req, id);
@@ -50,6 +53,7 @@ public class AutomovelService {
         return automovelRepository.save(a);
     }
 
+    @Transactional
     public void excluir(Long id) {
         buscar(id);
         if (!pedidoRepository.findByAutomovelId(id).isEmpty()) {

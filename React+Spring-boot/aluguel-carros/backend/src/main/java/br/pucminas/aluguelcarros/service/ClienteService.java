@@ -13,6 +13,7 @@ import br.pucminas.aluguelcarros.repository.UsuarioRepository;
 import br.pucminas.aluguelcarros.security.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class ClienteService {
         this.tokenService = tokenService;
     }
 
+    @Transactional
     public Cliente criar(ClienteRequest req) {
         if (req.senha() == null || req.senha().length() < 6) {
             throw new RegraNegocioException("A senha deve ter ao menos 6 caracteres.");
@@ -54,6 +56,7 @@ public class ClienteService {
         return buscarPorId(id);
     }
 
+    @Transactional
     public Cliente atualizar(Long id, ClienteRequest req, Usuario logado) {
         verificarAcesso(id, logado);
         Cliente cliente = buscarPorId(id);
@@ -69,6 +72,7 @@ public class ClienteService {
         return (Cliente) usuarioRepository.save(cliente);
     }
 
+    @Transactional
     public void excluir(Long id, Usuario logado) {
         verificarAcesso(id, logado);
         buscarPorId(id);

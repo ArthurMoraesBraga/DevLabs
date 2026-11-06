@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record AutomovelRequest(
@@ -13,7 +14,12 @@ public record AutomovelRequest(
         @NotBlank(message = "Informe a marca") String marca,
         @NotBlank(message = "Informe o modelo") String modelo,
         @NotBlank(message = "Informe a placa") String placa,
-        @Size(max = 1000, message = "A URL da imagem é muito longa") String imagemUrl,
+        @Size(max = 1000, message = "A URL da imagem é muito longa")
+        @Pattern(
+                regexp = "^$|^https?://.+",
+                message = "A imagem deve ser um link http(s) válido"
+        )
+        String imagemUrl,
         TipoProprietario tipoProprietario,
         Long proprietarioId
 ) {

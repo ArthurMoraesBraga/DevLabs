@@ -12,6 +12,7 @@ import br.pucminas.aluguelcarros.model.PedidoAluguel;
 import br.pucminas.aluguelcarros.model.Usuario;
 import br.pucminas.aluguelcarros.repository.PedidoAluguelRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,6 +33,7 @@ public class PedidoAluguelService {
         this.clienteService = clienteService;
     }
 
+    @Transactional
     public PedidoAluguel criar(PedidoRequest req, Usuario logado) {
         Cliente cliente = clienteService.buscarPorId(logado.getId());
         Automovel automovel = automovelService.buscar(req.automovelId());
@@ -60,6 +62,7 @@ public class PedidoAluguelService {
         return pedido;
     }
 
+    @Transactional
     public PedidoAluguel atualizar(Long id, PedidoRequest req, Usuario logado) {
         PedidoAluguel pedido = buscar(id, logado);
         if (logado.getPerfil().isAgente()) {
@@ -75,12 +78,14 @@ public class PedidoAluguelService {
         return pedidoRepository.save(pedido);
     }
 
+    @Transactional
     public PedidoAluguel cancelar(Long id, Usuario logado) {
         PedidoAluguel pedido = buscar(id, logado);
         pedido.cancelar();
         return pedidoRepository.save(pedido);
     }
 
+    @Transactional
     public PedidoAluguel avaliar(Long id, AvaliacaoRequest req, Usuario logado) {
         PedidoAluguel pedido = buscarPorId(id);
         pedido.avaliar((Agente) logado, req.aprovado(), req.parecer().trim());
