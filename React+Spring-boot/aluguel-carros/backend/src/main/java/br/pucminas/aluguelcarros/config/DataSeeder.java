@@ -58,10 +58,35 @@ public class DataSeeder implements CommandLineRunner {
                     "Av. Afonso Pena, 1500 - BH/MG", "55666777000188", Perfil.BANCO));
         }
 
-        if (automovelRepository.count() == 0) {
-            automovelService.criar(new AutomovelRequest("MAT-0001", 2023, "Fiat", "Argo", "ABC1D23", null, null));
-            automovelService.criar(new AutomovelRequest("MAT-0002", 2022, "Volkswagen", "Polo", "DEF4G56", null, null));
-            automovelService.criar(new AutomovelRequest("MAT-0003", 2024, "Toyota", "Corolla", "HIJ7K89", null, null));
+        String imgArgo = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBeSC8rsRqCHliDIA9OW8pAuhC0fIYfEbJ82rJnuz-4vvJtGl-jr5LJk-29BYbNILnREDIK72oLg53NfIy87JMuj8kEeA5ZppUo2WEkrp5jUEERl6wJoowB6pkwZ9QuCmzvVhD4qHgQP97RCdkydgmio3zX0RfoCRFpn9Iuojdom4Cpm1b8ErE_xXuDw/s600-rw/Novo-Argo-2023%20(3).jpg";
+        String imgPolo = "https://commons.wikimedia.org/wiki/Special:FilePath/Volkswagen%20Polo%20VI%20GTI%20(2021)%201X7A0343.jpg?width=900";
+        String imgCorolla = "https://hips.hearstapps.com/hmg-prod/images/2024-toyota-gr-corolla-premium-exterior-107-662035ecce76c.jpg?crop=0.673xw:0.566xh;0.157xw,0.269xh&resize=1200:*";
+
+        criarAutomovelSeNecessario(new AutomovelRequest("MAT-0001", 2023, "Fiat", "Argo", "ABC1D23", imgArgo, null, null));
+        criarAutomovelSeNecessario(new AutomovelRequest("MAT-0002", 2022, "Volkswagen", "Polo", "DEF4G56", imgPolo, null, null));
+        criarAutomovelSeNecessario(new AutomovelRequest("MAT-0003", 2024, "Toyota", "Corolla", "HIJ7K89", imgCorolla, null, null));
+
+        // Corrige a imagem dos carros de demonstração que já existiam no banco
+        // com links antigos/errados (atualiza pela matrícula, sem duplicar).
+        atualizarImagemDemo("MAT-0001", imgArgo);
+        atualizarImagemDemo("MAT-0002", imgPolo);
+        atualizarImagemDemo("MAT-0003", imgCorolla);
+    }
+
+    /** Cria o automóvel apenas se a matrícula ainda não existir. */
+    private void criarAutomovelSeNecessario(AutomovelRequest req) {
+        if (automovelRepository.findByMatricula(req.matricula()).isEmpty()) {
+            automovelService.criar(req);
         }
+    }
+
+    /** Garante que o carro de demonstração tenha a imagem correta. */
+    private void atualizarImagemDemo(String matricula, String imagemUrl) {
+        automovelRepository.findByMatricula(matricula).ifPresent(a -> {
+            if (!imagemUrl.equals(a.getImagemUrl())) {
+                a.setImagemUrl(imagemUrl);
+                automovelRepository.save(a);
+            }
+        });
     }
 }

@@ -84,6 +84,8 @@ public class AutomovelService {
         a.setMarca(req.marca().trim());
         a.setModelo(req.modelo().trim());
         a.setPlaca(req.placa().trim().toUpperCase(Locale.ROOT));
+        String imagem = req.imagemUrl() == null ? null : req.imagemUrl().trim();
+        a.setImagemUrl(imagem == null || imagem.isEmpty() ? null : imagem);
         a.setTipoProprietario(req.tipoProprietario());
         a.setProprietarioId(req.proprietarioId());
     }

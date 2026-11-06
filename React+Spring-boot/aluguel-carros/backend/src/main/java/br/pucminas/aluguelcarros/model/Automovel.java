@@ -32,6 +32,9 @@ public class Automovel implements Identificavel {
     @Column(nullable = false, unique = true, length = 20)
     private String placa;
 
+    @Column(name = "imagem_url", length = 1000)
+    private String imagemUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_proprietario", length = 20)
     private TipoProprietario tipoProprietario;
@@ -59,6 +62,9 @@ public class Automovel implements Identificavel {
 
     public String getPlaca() { return placa; }
     public void setPlaca(String placa) { this.placa = placa; }
+
+    public String getImagemUrl() { return imagemUrl; }
+    public void setImagemUrl(String imagemUrl) { this.imagemUrl = imagemUrl; }
 
     public TipoProprietario getTipoProprietario() { return tipoProprietario; }
     public void setTipoProprietario(TipoProprietario tipoProprietario) { this.tipoProprietario = tipoProprietario; }
