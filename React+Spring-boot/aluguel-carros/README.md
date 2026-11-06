@@ -1,6 +1,6 @@
 ---
 
-# 🚗 Sistema de Aluguel de Carros 👨‍💻
+# 🚗 DriveFlow — Plataforma de Aluguel de Carros 🔑
 
 > [!NOTE]
 > Sistema web para **efetuar, modificar, consultar e cancelar pedidos de aluguel de automóveis pela Internet**, com análise financeira feita por agentes (empresas e bancos) e execução de contratos, com ou sem crédito bancário.
@@ -24,7 +24,7 @@
 
 ## 🚧 Status do Projeto
 
-[![Versão](https://img.shields.io/badge/Versão-v0.1.0-blue?style=for-the-badge)](#) ![Status](https://img.shields.io/badge/Status-Protótipo-orange?style=for-the-badge) ![Java](https://img.shields.io/badge/Java-25-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.x-007ec6?style=for-the-badge&logo=springboot&logoColor=white) ![Maven](https://img.shields.io/badge/Maven-3.9-007ec6?style=for-the-badge&logo=apachemaven&logoColor=white) ![React](https://img.shields.io/badge/React-19-007ec6?style=for-the-badge&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-7-007ec6?style=for-the-badge&logo=vite&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-próxima_etapa-lightgrey?style=for-the-badge&logo=supabase&logoColor=white) ![Licença](https://img.shields.io/badge/Licença-MIT-007ec6?style=for-the-badge&logo=opensourceinitiative)
+[![Versão](https://img.shields.io/badge/Versão-v0.1.0-blue?style=for-the-badge)](#) ![Status](https://img.shields.io/badge/Status-Protótipo-orange?style=for-the-badge) ![Java](https://img.shields.io/badge/Java-25-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.x-007ec6?style=for-the-badge&logo=springboot&logoColor=white) ![Maven](https://img.shields.io/badge/Maven-3.9-007ec6?style=for-the-badge&logo=apachemaven&logoColor=white) ![React](https://img.shields.io/badge/React-19-007ec6?style=for-the-badge&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-7-007ec6?style=for-the-badge&logo=vite&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) ![Licença](https://img.shields.io/badge/Licença-MIT-007ec6?style=for-the-badge&logo=opensourceinitiative)
 
 | Etapa do laboratório | Situação |
 | :--- | :---: |
@@ -32,7 +32,9 @@
 | Autenticação (login de clientes e agentes) | ✅ Concluída |
 | CRUD de cliente | ✅ Concluído |
 | Protótipo: criar e visualizar status de pedido | ✅ Concluído |
-| Persistência no Supabase (PostgreSQL) | 🔜 Próxima etapa (hoje os dados ficam em memória) |
+| Persistência no Supabase (PostgreSQL) via JPA/Hibernate | ✅ Concluída |
+| CRUD de automóveis com edição e imagem por link | ✅ Concluído |
+| Modo escuro (dark mode) no front-end | ✅ Concluído |
 | Revisão dos diagramas conforme feedback | 🔄 Contínua |
 
 ---
@@ -110,7 +112,8 @@ PENDENTE ──avaliar (aprovado)──▶ APROVADO ──executar contrato─�
 - 📝 **Pedidos de Aluguel (cliente):** introduzir, consultar, modificar (enquanto PENDENTE) e cancelar (PENDENTE ou APROVADO).
 - 🏦 **Análise financeira (agente):** visualizar a renda do cliente e aprovar ou reprovar o pedido com parecer.
 - 📄 **Execução de contrato (agente):** definir o proprietário do automóvel (cliente, empresa ou banco) e associar um contrato de crédito (banco, valor, juros, prazo).
-- 🚘 **Automóveis:** consulta da frota por todos; cadastro, edição e exclusão por agentes, com placa e matrícula únicas.
+- 🚘 **Automóveis:** consulta da frota por todos; cadastro, **edição** e exclusão por agentes, com placa e matrícula únicas. Cada veículo aceita um **link de imagem**: ao colar a URL da foto, a imagem aparece em pré-visualização e nos cards (sem link, o sistema gera uma ilustração SVG).
+- 🌗 **Modo escuro:** tema claro/escuro alternável em toda a aplicação (inclusive login e cadastro), com a preferência salva no navegador e respeitando o tema do sistema operacional.
 - 📊 **Painel inicial:** resumo da quantidade de pedidos por status.
 - 🛡️ **Controle de acesso por perfil:** cliente só vê os próprios dados e pedidos; agente vê todos.
 - ⚠️ **Erros padronizados:** respostas JSON com mensagem e detalhes por campo, exibidas no front-end.
@@ -135,8 +138,8 @@ PENDENTE ──avaliar (aprovado)──▶ APROVADO ──executar contrato─�
 * **Framework/Biblioteca:** React 19
 * **Linguagem:** JavaScript (ES2022+) com JSX
 * **Roteamento:** React Router 7
-* **Estilização:** CSS puro (`src/index.css`)
-* **Gerenciamento de Estado:** Context API (`AuthContext`) + `useState`
+* **Estilização:** CSS puro (`src/index.css`) com tokens de cor e **modo escuro** (tema claro/escuro alternável)
+* **Gerenciamento de Estado:** Context API (`AuthContext`, `ThemeContext`) + `useState`
 * **Build Tool:** Vite 7
 
 ### 🖥️ Back-end
@@ -144,8 +147,8 @@ PENDENTE ──avaliar (aprovado)──▶ APROVADO ──executar contrato─�
 * **Linguagem/Runtime:** Java 25 (JDK)
 * **Framework:** Spring Boot 4.0.x (Spring Web MVC, Spring Security, Bean Validation)
 * **Build e dependências:** Apache Maven
-* **Banco de Dados:** Supabase (PostgreSQL), próxima etapa. Hoje usa repositórios em memória
-* **ORM:** Spring Data JPA / Hibernate, próxima etapa
+* **Banco de Dados:** Supabase (PostgreSQL)
+* **ORM:** Spring Data JPA / Hibernate
 * **Autenticação:** Spring Security + token Bearer + BCrypt
 
 ### ⚙️ Infraestrutura & DevOps
@@ -167,7 +170,7 @@ O sistema é um **monólito em duas aplicações** (back-end e front-end) que se
 | **View** | front-end React | Construção dinâmica das páginas web a partir do JSON da API |
 | **Controller** | `controller` | Endpoints REST, validação de entrada (`@Valid`) e autorização por perfil (`@PreAuthorize`) |
 | Service | `service` | Orquestração dos casos de uso e regras que envolvem várias entidades |
-| Repository | `repository` | Acesso a dados (em memória, com os mesmos nomes de métodos do Spring Data) |
+| Repository | `repository` | Acesso a dados via Spring Data JPA (interfaces `JpaRepository`) sobre o PostgreSQL do Supabase |
 | DTO | `dto` | Objetos de entrada e saída da API (a senha nunca é exposta) |
 | Security | `security` | Emissão e validação de token; filtro de autenticação |
 | Config | `config` | Regras de acesso, CORS, BCrypt e dados de demonstração |
@@ -183,7 +186,7 @@ React (pages) → services/api.js → [HTTP + Bearer token]
 ```
 
 **Decisões e trade-offs:**
-- **Repositórios em memória nesta etapa:** permitem testar o sistema sem configurar banco. Os dados somem ao reiniciar o servidor. Como os métodos seguem o padrão do Spring Data (`save`, `findById`, `findAll`, `deleteById`), a migração para JPA/Supabase troca só a camada `repository` e as anotações do `model`.
+- **Persistência com Spring Data JPA + Supabase (PostgreSQL):** os repositórios são interfaces `JpaRepository` e as entidades do `model` são mapeadas com anotações JPA (`@Entity`, herança `SINGLE_TABLE`, `@ElementCollection` para os rendimentos). O schema é gerado por `ddl-auto=update` e os dados persistem entre reinicializações.
 - **Token opaco em memória** em vez de JWT: mais simples de entender e permite logout real (o token é apagado no servidor). Pode evoluir para JWT ou Supabase Auth.
 - **Herança `Usuario` → `Cliente` / `Agente` → `Empresa` / `Banco`:** um único login para todos os perfis, com regras específicas por subclasse.
 
@@ -224,8 +227,9 @@ Configuradas em `backend/src/main/resources/application.properties`:
 | :--- | :--- | :--- |
 | `server.port` | Porta do back-end | `8080` |
 | `app.cors.allowed-origin` | Origem do front-end liberada no CORS | `http://localhost:5173` |
-| `SUPABASE_DB_USER` | Usuário do banco (próxima etapa) | `postgres` |
-| `SUPABASE_DB_PASSWORD` | Senha do banco (próxima etapa) | `senha-segura-123` |
+| `SUPABASE_DB_URL` | URL JDBC do banco | `jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres` |
+| `SUPABASE_DB_USER` | Usuário do banco | `postgres.seu_project_ref` |
+| `SUPABASE_DB_PASSWORD` | Senha do banco | `senha-segura-123` |
 
 #### 2 Front-end (React, Vite)
 
@@ -266,10 +270,22 @@ cd ..
 
 ### 💾 Inicialização do Banco de Dados (PostgreSQL)
 
+A persistência usa **Supabase (PostgreSQL)** com **Spring Data JPA / Hibernate**. O schema é criado/atualizado automaticamente na primeira execução (`spring.jpa.hibernate.ddl-auto=update`) e o `DataSeeder` popula usuários e automóveis de demonstração **apenas se ainda não existirem** (é idempotente).
+
+**Configure as credenciais (sem expô-las no Git):**
+
+1. Copie o modelo para um arquivo local ignorado pelo Git:
+
+```bash
+cd backend/src/main/resources
+copy application-local.properties.example application-local.properties   # Windows
+# cp application-local.properties.example application-local.properties   # Linux/macOS
+```
+
+2. Edite `application-local.properties` com a URL, o usuário e a senha do seu projeto Supabase (painel do Supabase → *Project Settings → Database → Connection string*, modo *pooler*).
+
 > [!IMPORTANT]
-> Nesta versão **não há banco de dados**: os repositórios guardam os dados em memória e o `DataSeeder` cria os usuários e automóveis de demonstração a cada inicialização.
->
-> Na próxima etapa, o banco será o **Supabase (PostgreSQL)**: as dependências `spring-boot-starter-data-jpa` e `postgresql` já estão comentadas no `pom.xml`, e a configuração de conexão está comentada no `application.properties`.
+> `application-local.properties` está no `.gitignore` e nunca deve ir para o repositório. Em produção, prefira as variáveis de ambiente `SUPABASE_DB_URL`, `SUPABASE_DB_USER` e `SUPABASE_DB_PASSWORD`, que têm prioridade sobre o arquivo local.
 
 ---
 
@@ -351,7 +367,7 @@ aluguel-carros/
 │       │   ├── dto/             # ✉️ Requests e responses da API.
 │       │   ├── exception/       # 💥 Exceções de negócio e GlobalExceptionHandler.
 │       │   ├── model/           # 🧬 Entidades de domínio e regras de negócio.
-│       │   ├── repository/      # 🗄️ Repositórios (em memória → JPA na próxima etapa).
+│       │   ├── repository/      # 🗄️ Repositórios Spring Data JPA (JpaRepository) sobre o PostgreSQL.
 │       │   ├── security/        # 🛡️ TokenService e filtro de autenticação.
 │       │   └── service/         # ⚙️ Casos de uso e regras de negócio.
 │       └── resources/
@@ -536,5 +552,6 @@ Este projeto é distribuído sob a **[Licença MIT](./LICENSE)**.
 
 ## Identidade visual (front-end)
 
-O front-end usa um CSS global em `frontend/src/index.css` com tokens de cor, tipografia (DM Sans + Manrope), raios e sombras.
-As imagens dos automóveis são ilustrações SVG geradas em código (`components/CarArt.jsx`): a cor e a carroceria variam conforme a placa, sem depender de arquivos externos.
+O front-end usa um CSS global em `frontend/src/index.css` com tokens de cor, tipografia (DM Sans + Manrope), raios e sombras. O **modo escuro** é implementado remapeando esses tokens em `:root[data-theme="dark"]`, então todos os componentes se adaptam automaticamente; o tema é controlado por `context/ThemeContext.jsx` e alternado pelo botão `components/ThemeToggle.jsx`.
+
+As imagens dos automóveis podem vir de um **link informado pelo agente** (campo "Link da imagem" no cadastro/edição). Quando não há link — ou o link falha ao carregar — o sistema exibe uma ilustração SVG gerada em código (`components/CarArt.jsx`), cuja cor e carroceria variam conforme a placa, sem depender de arquivos externos.
