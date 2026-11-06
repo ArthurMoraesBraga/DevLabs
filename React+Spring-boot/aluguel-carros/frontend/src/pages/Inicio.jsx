@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import Mensagem from '../components/Mensagem.jsx'
-import CarArt from '../components/CarArt.jsx'
+import FotoCarro from '../components/FotoCarro.jsx'
 
 const STATUS = ['PENDENTE', 'APROVADO', 'REPROVADO', 'CONTRATADO', 'CANCELADO']
 
@@ -34,7 +34,17 @@ export default function Inicio() {
             {isCliente && <Link className="btn btn-outline" to="/pedidos/novo">Fazer novo pedido</Link>}
           </div>
         </div>
-        <CarArt seed="hero-inicio" titulo="Carro em destaque" />
+        {pedidos.length === 0 ? (
+          <Link to={isCliente ? '/pedidos/novo' : '/automoveis'} className="hero-cta" aria-label="Alugue seu carro">
+            <FotoCarro url={frota[0]?.imagemUrl} seed={frota[0]?.placa ?? 'hero-inicio'} titulo="Alugue seu carro" className="hero-carro" />
+            <span className="hero-cta-texto">
+              <strong>Alugue seu carro</strong>
+              <small>{isCliente ? 'Faça seu primeiro pedido agora' : 'Veja a frota disponível'}</small>
+            </span>
+          </Link>
+        ) : (
+          <FotoCarro url={frota[0]?.imagemUrl} seed={frota[0]?.placa ?? 'hero-inicio'} titulo="Carro em destaque" className="hero-carro" />
+        )}
       </div>
 
       <Mensagem erro={erro} />
@@ -57,7 +67,7 @@ export default function Inicio() {
           <div className="grid">
             {frota.slice(0, 3).map((a) => (
               <article key={a.id} className="car-card">
-                <CarArt seed={a.placa} titulo={`${a.marca} ${a.modelo}`} />
+                <FotoCarro url={a.imagemUrl} seed={a.placa} titulo={`${a.marca} ${a.modelo}`} />
                 <div className="car-card-content">
                   <h3 className="car-card-title">{a.marca} {a.modelo}</h3>
                   <div className="car-card-footer">

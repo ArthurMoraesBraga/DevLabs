@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { api } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import Mensagem from '../components/Mensagem.jsx'
-import CarArt from '../components/CarArt.jsx'
+import FotoCarro from '../components/FotoCarro.jsx'
 
-const VAZIO = { matricula: '', ano: '', marca: '', modelo: '', placa: '' }
+const VAZIO = { matricula: '', ano: '', marca: '', modelo: '', placa: '', imagemUrl: '' }
 
 /** Frota: todos consultam; agentes cadastram, editam e excluem. */
 export default function Automoveis() {
@@ -27,6 +27,7 @@ export default function Automoveis() {
     const dados = {
       ...form,
       ano: Number(form.ano),
+      imagemUrl: form.imagemUrl.trim() || null,
       // Propriedade é definida pelo contrato; na edição mantém a atual
       tipoProprietario: atual?.tipoProprietario ?? null,
       proprietarioId: atual?.proprietarioId ?? null,
@@ -44,7 +45,15 @@ export default function Automoveis() {
 
   function editar(a) {
     setEditandoId(a.id)
-    setForm({ matricula: a.matricula, ano: a.ano, marca: a.marca, modelo: a.modelo, placa: a.placa })
+    setForm({
+      matricula: a.matricula,
+      ano: a.ano,
+      marca: a.marca,
+      modelo: a.modelo,
+      placa: a.placa,
+      imagemUrl: a.imagemUrl ?? '',
+    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function excluir(a) {
@@ -78,6 +87,21 @@ export default function Automoveis() {
             <label>Marca<input value={form.marca} onChange={alterar('marca')} required /></label>
             <label>Modelo<input value={form.modelo} onChange={alterar('modelo')} required /></label>
           </div>
+          <label>
+            Link da imagem
+            <input
+              type="url"
+              placeholder="Cole o link da foto do carro (ex.: https://.../palio.jpg)"
+              value={form.imagemUrl}
+              onChange={alterar('imagemUrl')}
+            />
+            <small>Opcional. Ao colar o link, a imagem aparece na pré-visualização abaixo. Sem link, usamos uma ilustração.</small>
+          </label>
+
+          <div className="previa-carro">
+            <FotoCarro url={form.imagemUrl.trim()} seed={form.placa || 'novo'} titulo="Pré-visualização do automóvel" />
+          </div>
+
           <div className="acoes">
             <button className="btn btn-primary">{editandoId ? 'Salvar' : 'Cadastrar'}</button>
             {editandoId && <button type="button" className="btn btn-outline"
@@ -95,7 +119,7 @@ export default function Automoveis() {
         <div className="grid">
           {visiveis.map((a) => (
             <article key={a.id} className="car-card">
-              <CarArt seed={a.placa} titulo={`${a.marca} ${a.modelo}`} />
+              <FotoCarro url={a.imagemUrl} seed={a.placa} titulo={`${a.marca} ${a.modelo}`} />
               <div className="car-card-content">
                 <h3 className="car-card-title">{a.marca} {a.modelo}</h3>
                 <div className="car-card-info">

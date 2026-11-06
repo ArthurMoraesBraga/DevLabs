@@ -17,7 +17,7 @@ export default function Marca() {
   return (
     <span className="logo">
       <LogoMark />
-      <span style={{ color: 'inherit' }}>Aluguel<span>Car</span></span>
+      <span style={{ color: 'inherit' }}>Drive<span>Flow</span></span>
     </span>
   )
 }

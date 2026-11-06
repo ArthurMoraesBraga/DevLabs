@@ -4,7 +4,7 @@ import { api } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
 import Mensagem from '../components/Mensagem.jsx'
-import CarArt from '../components/CarArt.jsx'
+import FotoCarro from '../components/FotoCarro.jsx'
 import { formatarData } from '../utils/formatar.js'
 
 export default function Pedidos() {
@@ -70,7 +70,7 @@ export default function Pedidos() {
                   {isAgente && <td>{p.cliente.nome}</td>}
                   <td>
                     <div className="celula-carro">
-                      <CarArt seed={p.automovel.placa} titulo="" />
+                      <FotoCarro url={p.automovel.imagemUrl} seed={p.automovel.placa} titulo={`${p.automovel.marca} ${p.automovel.modelo}`} />
                       <div>{p.automovel.marca} {p.automovel.modelo}<br /><small>{p.automovel.placa}</small></div>
                     </div>
                   </td>

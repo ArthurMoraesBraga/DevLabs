@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { api } from '../services/api.js'
 import Mensagem from '../components/Mensagem.jsx'
-import CarArt from '../components/CarArt.jsx'
+import FotoCarro from '../components/FotoCarro.jsx'
 import { hojeISO } from '../utils/formatar.js'
 
 /** Introduzir (sem id) ou modificar (com id) um pedido de aluguel. */
@@ -43,7 +43,7 @@ export default function PedidoForm() {
       <Mensagem erro={erro} />
       {escolhido && (
         <div className="pre-visualizacao">
-          <CarArt seed={escolhido.placa} titulo={`${escolhido.marca} ${escolhido.modelo}`} />
+          <FotoCarro url={escolhido.imagemUrl} seed={escolhido.placa} titulo={`${escolhido.marca} ${escolhido.modelo}`} />
         </div>
       )}
       <form className="formulario cartao" onSubmit={salvar}>

@@ -4,7 +4,7 @@ import { api } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
 import Mensagem from '../components/Mensagem.jsx'
-import CarArt from '../components/CarArt.jsx'
+import FotoCarro from '../components/FotoCarro.jsx'
 import { formatarData, formatarMoeda } from '../utils/formatar.js'
 
 /** Consulta do pedido + ações do agente (avaliar e executar contrato). */
@@ -41,7 +41,7 @@ export default function PedidoDetalhe() {
       <Mensagem erro={erro} sucesso={sucesso} />
 
       <div className="banner-carro">
-        <CarArt seed={pedido.automovel.placa} titulo={`${pedido.automovel.marca} ${pedido.automovel.modelo}`} />
+        <FotoCarro url={pedido.automovel.imagemUrl} seed={pedido.automovel.placa} titulo={`${pedido.automovel.marca} ${pedido.automovel.modelo}`} />
       </div>
 
       <div className="cartao">
