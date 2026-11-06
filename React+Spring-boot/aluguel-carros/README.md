@@ -223,17 +223,43 @@ React (pages) → services/api.js → [HTTP + Bearer token]
 
 ### Diagramas
 
-Os diagramas estão em PlantUML na pasta [`docs/diagramas`](docs/diagramas). Para visualizar, use o [PlantUML Online](https://www.plantuml.com/plantuml) ou a extensão PlantUML do VS Code.
+Os diagramas foram modelados em PlantUML (pasta [`docs/diagramas`](docs/diagramas)) e exportados como PNG em [`docs/diagramas/img`](docs/diagramas/img) para visualização direta no GitHub.
 
-| Diagrama | Arquivo |
-| :---: | :---: |
-| **Casos de Uso** | [`casos-de-uso.puml`](docs/diagramas/casos-de-uso.puml) |
-| **Classes (Modelo)** | [`classes.puml`](docs/diagramas/classes.puml) |
-| **Pacotes (Visão Lógica)** | [`pacotes.puml`](docs/diagramas/pacotes.puml) |
-| **Histórias de Usuário** | [`historias-de-usuario.md`](docs/historias-de-usuario.md) |
+#### Diagrama de Casos de Uso
 
-> [!TIP]
-> Exporte cada diagrama como PNG para `docs/diagramas/img/` e substitua os links da tabela acima por `<img src="docs/diagramas/img/classes.png" width="400px">` para que apareçam direto no GitHub.
+<div align="center">
+  <img src="docs/diagramas/img/casos-de-uso.png" alt="Diagrama de Casos de Uso" width="720px"/>
+</div>
+
+#### Diagrama de Classes (Modelo)
+
+<div align="center">
+  <img src="docs/diagramas/img/classes.png" alt="Diagrama de Classes" width="820px"/>
+</div>
+
+#### Diagrama de Pacotes (Visão Lógica)
+
+<div align="center">
+  <img src="docs/diagramas/img/pacotes.png" alt="Diagrama de Pacotes" width="720px"/>
+</div>
+
+As **histórias de usuário** estão em [`historias-de-usuario.md`](docs/historias-de-usuario.md).
+
+> [!NOTE]
+> Para reexportar os PNGs após editar os `.puml`, rode na pasta `docs/diagramas`:
+> `java -jar plantuml.jar -tpng -o img *.puml` (baixe o `plantuml.jar` do [site oficial](https://plantuml.com/download); o jar não é versionado).
+
+#### Histórico das versões dos modelos
+
+Conforme o projeto evoluiu, os modelos foram revisados. Mantemos a versão inicial (`-v1`) e a versão atual para registrar as mudanças:
+
+| Modelo | Versão inicial (v1) | Versão atual (v2) | O que mudou |
+| :--- | :--- | :--- | :--- |
+| Classes | [`classes-v1.puml`](docs/diagramas/classes-v1.puml) · [PNG](docs/diagramas/img/classes-v1.png) | [`classes.puml`](docs/diagramas/classes.puml) · [PNG](docs/diagramas/img/classes.png) | Adicionado o campo `imagemUrl` em `Automovel` (imagem do carro por link). |
+| Pacotes | [`pacotes-v1.puml`](docs/diagramas/pacotes-v1.puml) · [PNG](docs/diagramas/img/pacotes-v1.png) | [`pacotes.puml`](docs/diagramas/pacotes.puml) · [PNG](docs/diagramas/img/pacotes.png) | Persistência passou de "memória (futuro: Supabase)" para **Supabase (PostgreSQL) via Spring Data JPA**. |
+| Casos de Uso | — | [`casos-de-uso.puml`](docs/diagramas/casos-de-uso.puml) · [PNG](docs/diagramas/img/casos-de-uso.png) | Sem alterações estruturais entre as versões. |
+
+Essas mudanças são justamente as **modificações inseridas** para o funcionamento adequado do software: persistência real no Supabase e suporte a imagem dos automóveis.
 
 ---
 
@@ -436,21 +462,81 @@ aluguel-carros/
 
 ## 🎥 Demonstração
 
-> [!WARNING]
-> Substitua as imagens abaixo por capturas reais do sistema (salve em `docs/assets/` ou no GitHub Pages).
-
 ### 🌐 Aplicação Web
 
-Para melhor visualização, as telas principais estão organizadas lado a lado.
+#### 🔐 Login
 
-| Tela | Captura de Tela |
+A aplicação tem **modo claro e modo escuro**, alternáveis pelo botão no canto superior direito. A preferência fica salva no navegador.
+
+| ☀️ Modo claro | 🌙 Modo escuro |
 | :---: | :---: |
-| **Login** | **Cadastro (cliente / agente)** |
-| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela de Login" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela de Cadastro" width="120px" height="120px"> |
-| **Início (resumo por status)** | **Lista de Pedidos** |
-| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela Inicial" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Lista de Pedidos" width="120px" height="120px"> |
-| **Detalhe do Pedido (avaliação e contrato)** | **Automóveis (CRUD + imagem)** |
-| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Detalhe do Pedido" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Automóveis" width="120px" height="120px"> |
+| <img src="docs/screenshots/login_branco.jpg" alt="Tela de Login no modo claro" width="420px"/> | <img src="docs/screenshots/login_preto.jpg" alt="Tela de Login no modo escuro" width="420px"/> |
+
+#### 👤 Cadastro de cliente
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/cadastro_cliente_branco.jpg" alt="Tela de Cadastro de cliente no modo claro" width="420px"/> | <img src="docs/screenshots/cadastro_cliente_preto.jpg" alt="Tela de Cadastro de cliente no modo escuro" width="420px"/> |
+
+#### 🏢 Cadastro de agente (empresa / banco)
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/cadastro_agente_branco.jpg" alt="Tela de Cadastro de agente no modo claro" width="420px"/> | <img src="docs/screenshots/cadastro_agente_preto.jpg" alt="Tela de Cadastro de agente no modo escuro" width="420px"/> |
+
+#### 🏠 Início do cliente (resumo por status e frota em destaque)
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/inicio_cliente_branco.jpg" alt="Tela inicial do cliente no modo claro" width="420px"/> | <img src="docs/screenshots/inicio_cliente_preto.jpg" alt="Tela inicial do cliente no modo escuro" width="420px"/> |
+
+#### 📋 Pedidos (abas Ativos / Cancelados / Todos)
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/pedidos_branco.jpg" alt="Lista de pedidos no modo claro" width="420px"/> | <img src="docs/screenshots/pedidos_preto.jpg" alt="Lista de pedidos no modo escuro" width="420px"/> |
+
+#### ➕ Novo pedido de aluguel
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/novo_pedido_branco.jpg" alt="Tela de novo pedido no modo claro" width="420px"/> | <img src="docs/screenshots/novo_pedido_preto.jpg" alt="Tela de novo pedido no modo escuro" width="420px"/> |
+
+#### 🚘 Automóveis (frota com imagem por link)
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/automoveis_branco.jpg" alt="Tela de automóveis no modo claro" width="420px"/> | <img src="docs/screenshots/automoveis_preto.jpg" alt="Tela de automóveis no modo escuro" width="420px"/> |
+
+#### 🧑 Meu perfil (edição de cliente e rendimentos)
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/meu_perfil_branco.jpg" alt="Tela meu perfil no modo claro" width="420px"/> | <img src="docs/screenshots/meu_perfil_preto.jpg" alt="Tela meu perfil no modo escuro" width="420px"/> |
+
+#### 🏢 Início do agente (empresa)
+
+Visão do agente: acesso a **Clientes** e sem a opção de criar pedido (exclusiva do cliente).
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/inicio_empresa_branco.jpg" alt="Tela inicial da empresa no modo claro" width="420px"/> | <img src="docs/screenshots/inicio_empresa_preto.jpg" alt="Tela inicial da empresa no modo escuro" width="420px"/> |
+
+#### 📑 Pedidos (visão do agente)
+
+O agente vê os pedidos de **todos os clientes** (com a coluna "Cliente") e pode modificar e avaliar.
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/pedidos_agente_branco.jpg" alt="Pedidos na visão do agente no modo claro" width="420px"/> | <img src="docs/screenshots/pedidos_agente_preto.jpg" alt="Pedidos na visão do agente no modo escuro" width="420px"/> |
+
+#### 🚗 Automóveis (visão do agente: cadastro, edição e imagem por link)
+
+O agente cadastra, edita e exclui veículos. O campo **"Link da imagem"** mostra uma **pré-visualização** (quando não há link, exibe a ilustração gerada); ao salvar um link, a foto aparece nos cards.
+
+| ☀️ Modo claro | 🌙 Modo escuro |
+| :---: | :---: |
+| <img src="docs/screenshots/automoveis_empresa_branco.jpg" alt="Automóveis na visão do agente no modo claro" width="420px"/> | <img src="docs/screenshots/automoveis_empresa_preto.jpg" alt="Automóveis na visão do agente no modo escuro" width="420px"/> |
 
 ### 💻 Exemplo de Saída no Terminal (API)
 
