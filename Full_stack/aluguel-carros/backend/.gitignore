@@ -1,0 +1,11 @@
+
+target
+
+src/main/resources/application-local.properties
+src/main/resources/application-*-local.properties
+!src/main/resources/application-local.properties.example
+.env
+*.env
+!.env.example
+
+
